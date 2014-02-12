@@ -14,13 +14,13 @@ class BucketTest extends PHPUnit_Framework_TestCase {
         $this->assertSame('b', $bucket['a']);
     }
 
-    public function testGetRecursiveValue () {
+    /*public function testGetRecursiveValue () {
         $_SESSION['gajus']['skip']['bucket']['foo'] = ['a' => ['b' => 'c']];
 
         $bucket = new \Gajus\Skip\Bucket('foo');
 
         $this->assertSame('c', $bucket['a']['b']);
-    }
+    }*/
 
     public function testSetValue () {
         $bucket = new \Gajus\Skip\Bucket('foo');
@@ -30,17 +30,29 @@ class BucketTest extends PHPUnit_Framework_TestCase {
         $this->assertSame('b', $bucket['a']);
     }
 
-    public function testSetRecursiveValue () {
+    /*public function testSetRecursiveValue () {
         $bucket = new \Gajus\Skip\Bucket('foo');
 
         $bucket['a']['b'] = 'c';
 
         $this->assertSame('c', $bucket['a']['b']);
+    }*/
+
+    public function testIssetValue () {
+        $bucket = new \Gajus\Skip\Bucket('foo');
+
+        $bucket['a'] = 'b';
+
+        $this->assertTrue(isset($bucket['a']));
     }
 
-    /*public function testSetValue () {
-        $bucket = new \Gajus\Go\Bucket('foo');
+    public function testUnsetValue () {
+        $bucket = new \Gajus\Skip\Bucket('foo');
 
-        $bucket['bar'] = 'baz';
-    }*/
+        $bucket['a'] = 'b';
+
+        unset($bucket['a']);
+
+        $this->assertFalse(isset($bucket['a']));
+    }
 }

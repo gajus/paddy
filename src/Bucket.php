@@ -38,7 +38,7 @@ class Bucket implements \ArrayAccess {
     }
 
     public function offsetGet ($offset) {
-        return isset($this->data[$offset]) ? $this->data[$offset] : [];
+        return isset($this->data[$offset]) ? $this->data[$offset] : null;
     }
 
     public function offsetSet ($offset, $value) {
