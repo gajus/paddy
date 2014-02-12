@@ -1,6 +1,22 @@
 <?php
 class BucketTest extends PHPUnit_Framework_TestCase {
-    public function getUid () {
+    public function setUp () {
+        if (session_status() == PHP_SESSION_NONE) {
+           session_start();
+        }
+    }
+
+    /**
+     * @expectedException Gajus\Skip\Exception\LogicException
+     * @expectedExceptionMessage Session must be started before using Bucket.
+     */
+    public function testInitialiseWithoutSession () {
+        session_write_close();
+
+        new \Gajus\Skip\Bucket('foo');
+    }
+
+    public function testGetUid () {
         $bucket = new \Gajus\Skip\Bucket('foo');
 
         $this->assertSame('foo', $bucket->getUid());
