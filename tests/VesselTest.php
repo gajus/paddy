@@ -1,7 +1,7 @@
 <?php
-class SkipTest extends PHPUnit_Framework_TestCase {
+class VesselTest extends PHPUnit_Framework_TestCase {
     public function testSetDefaultRoute () {
-        $skip = new \Gajus\Skip\Skip('http://gajus.com/');
+        $skip = new \Gajus\Skip\Vessel('http://gajus.com/');
 
         $this->assertSame('http://gajus.com/', $skip->getRoute('default'));
     }
@@ -11,7 +11,7 @@ class SkipTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage Invalid URL.
      */
     public function testSetRouteInvalidURL () {
-        $skip = new \Gajus\Skip\Skip('foo');
+        $skip = new \Gajus\Skip\Vessel('foo');
     }
 
     /**
@@ -19,11 +19,11 @@ class SkipTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage URL does not refer to a directory.
      */
     public function testSetRouteURLNotBase () {
-        $skip = new \Gajus\Skip\Skip('http://gajus.com');
+        $skip = new \Gajus\Skip\Vessel('http://gajus.com');
     }
 
     public function testSetCustomRoute () {
-        $skip = new \Gajus\Skip\Skip('http://gajus.com/');
+        $skip = new \Gajus\Skip\Vessel('http://gajus.com/');
 
         $skip->setRoute('foo', 'http://gajus.com/foo/');
 
@@ -35,20 +35,20 @@ class SkipTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage Cannot overwrite existing route.
      */
     public function testOverwriteExistingRoute () {
-        $skip = new \Gajus\Skip\Skip('http://gajus.com/');
+        $skip = new \Gajus\Skip\Vessel('http://gajus.com/');
 
         $skip->setRoute('foo', 'http://gajus.com/foo/');
         $skip->setRoute('foo', 'http://gajus.com/foo/');
     }
 
     public function testGetURL () {
-        $skip = new \Gajus\Skip\Skip('http://gajus.com/');
+        $skip = new \Gajus\Skip\Vessel('http://gajus.com/');
 
         $this->assertSame('http://gajus.com/', $skip->url());
     }
 
     public function testGetURLUsingCustomPath () {
-        $skip = new \Gajus\Skip\Skip('http://gajus.com/');
+        $skip = new \Gajus\Skip\Vessel('http://gajus.com/');
 
         $this->assertSame('http://gajus.com/foo', $skip->url('foo'));
     }
@@ -58,7 +58,7 @@ class SkipTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage Path is not relative to the route URL.
      */
     public function testGetURLUsingAbsoluteCustomPath () {
-        $skip = new \Gajus\Skip\Skip('http://gajus.com/');
+        $skip = new \Gajus\Skip\Vessel('http://gajus.com/');
 
         $skip->url('/foo');
     }
