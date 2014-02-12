@@ -54,7 +54,12 @@ class Vessel {
         return $route . $path;
     }
 
+    /**
+     * Redirect 
+     */
     public function go ($path, $route = 'default') {
         header('Location: ' . $this->url($path, $route));
+
+        exit;
     }
 }

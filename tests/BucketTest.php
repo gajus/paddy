@@ -1,9 +1,7 @@
 <?php
 class BucketTest extends PHPUnit_Framework_TestCase {
     public function setUp () {
-        if (session_status() == PHP_SESSION_NONE) {
-           session_start();
-        }
+        @session_start();
     }
 
     /**
