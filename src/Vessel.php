@@ -5,7 +5,7 @@ namespace Gajus\Skip;
  * @link https://github.com/gajus/skip for the canonical source repository
  * @license https://github.com/gajus/skip/blob/master/LICENSE BSD 3-Clause
  */
-class Skip {
+class Vessel {
     private
         $map = [];
 
@@ -54,9 +54,7 @@ class Skip {
         return $route . $path;
     }
 
-    /*public function go ($path, $route = 'default') {
+    public function go ($path, $route = 'default') {
         header('Location: ' . $this->url($path, $route));
-
-        exit;
-    }*/
+    }
 }
