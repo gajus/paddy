@@ -11,7 +11,7 @@ class BucketTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage Session must be started before using Bucket.
      */
     public function testInitialiseWithoutSession () {
-        session_write_close();
+        session_destroy();
 
         new \Gajus\Skip\Bucket('foo');
     }
