@@ -74,10 +74,8 @@ $vessel->go('/third');
 ```php
 // Third page
 if ($pigeon->has('error')) {
-    $pigeon->getMessages();
+    var_dump($pigeon->getMessages());
 }
-
-$vessel->go('/fourth');
 ```
 
 ```php
