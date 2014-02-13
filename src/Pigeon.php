@@ -38,12 +38,23 @@ class Pigeon {
         return $this->name;
     }
 
+    /**
+     * @param string $message
+     * @param string $namespace
+     * @return $this
+     */
     public function send ($message, $namespace = 'error') {
+        if (!is_string($message)) {
+            throw new Exception\UnexpectedValueException('Message is not a string.');
+        }
+
         if (!isset($this->messages[$namespace])) {
             $this->messages[$namespace] = [];
         }
 
         $this->messages[$namespace][] = $message;
+
+        return $this;
     }
 
     /**
@@ -72,10 +83,6 @@ class Pigeon {
 
             foreach ($messages as $namespace => $submessages) {
                 foreach ($submessages as $message) {
-                    if (!is_string($message)) {
-                        throw new Exception\UnexpectedValueException('Message is not a string.');
-                    }
-
                     $messages_body .= '<li>' . $message . '</li>';
                 }
             }

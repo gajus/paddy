@@ -14,13 +14,13 @@ class PieonTest extends PHPUnit_Framework_TestCase {
         new \Gajus\Skip\Pigeon();
     }
 
-    public function testGetDefaultName () {
+    public function testGetDefaultPigeonName () {
         $pigeon = new \Gajus\Skip\Pigeon();
 
         $this->assertSame('default', $pigeon->getName());
     }
 
-    public function testSetName () {
+    public function testSetPigeonName () {
         $pigeon = new \Gajus\Skip\Pigeon('john');
 
         $this->assertSame('john', $pigeon->getName());
@@ -56,6 +56,22 @@ class PieonTest extends PHPUnit_Framework_TestCase {
         $pigeon->send('test', 'success');
 
         $this->assertSame(['success' => ['test']], $pigeon->getMessages());
+    }
+
+    /**
+     * @expectedException Gajus\Skip\Exception\UnexpectedValueException
+     * @expectedExceptionMessage Message is not a string.
+     */
+    public function testSendMessageNotString () {
+        $pigeon = new \Gajus\Skip\Pigeon();
+
+        $pigeon->send(['test']);
+    }
+
+    public function testSendMessageReturnPigeon () {
+        $pigeon = new \Gajus\Skip\Pigeon();
+
+        $this->assertSame($pigeon, $pigeon->send('test'));
     }
 
     public function testEmptyTemplate () {
