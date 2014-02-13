@@ -1,6 +1,7 @@
 {
 	"name": "gajus/skip",
 	"description": "Navigation and messaging utility.",
+	"keywords": ["url", "flash", "session", "message", "redirect"],
 	"homepage": "https://github.com/gajus/skip",
 	"type": "library",
 	"license": "BSD-3-Clause",
