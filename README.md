@@ -38,7 +38,7 @@ $vessel->go();
 $vessel->go( $vessel->url() );
 ```
 
-The above is ~equivalent to:
+The above is equivalent to:
 
 ```php
 header('Location: ' . $vessel->url('post/1'));
@@ -46,7 +46,7 @@ header('Location: ' . $vessel->url('post/1'));
 exit;
 ```
 
-However, it will throw an exception if [headers have been already sent](http://stackoverflow.com/questions/8028957/how-to-fix-headers-already-sent-error-in-php).
+However, it will throw `Exception\LogicException` exception if [headers have been already sent](http://stackoverflow.com/questions/8028957/how-to-fix-headers-already-sent-error-in-php).
 
 ## Bucket
 
@@ -62,14 +62,14 @@ $bucket = new \Gajus\Skip\Bucket('application name');
 // First page
 $bucket['error'][] = 'Loaded to the Gunwales!';
 
-header('Location: /second');
+$vessel->go('/second');
 ```
 
 Bucket content is not removed if page does not produce output beyond headers.
 
 ```php
 // Second page
-header('Location: /third');
+$vessel->go('/third');
 ```
 
 ```php
@@ -78,7 +78,7 @@ if ($bucket['error']) {
     echo $bucket['error'];
 }
 
-header('Location: /fourth');
+$vessel->go('/fourth');
 ```
 
 ```php
