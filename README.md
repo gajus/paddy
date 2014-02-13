@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/gajus/skip.png?branch=master)](https://travis-ci.org/gajus/skip)
 [![Coverage Status](https://coveralls.io/repos/gajus/skip/badge.png)](https://coveralls.io/r/gajus/skip)
 
-> You can't be a skipper without a great, big vessel and a deep, sturdy bucket. No nay ne'er!
+> You can't be a skipper without a great, big vessel and a matey parrot. No nay ne'er!
 
 Getting all serious now, – a utility to persist data between requests, generate URLs and handle redirects.
 
