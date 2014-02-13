@@ -41,7 +41,7 @@ class VesselTest extends PHPUnit_Framework_TestCase {
         $skip->setRoute('foo', 'http://gajus.com/foo/');
     }
 
-    public function testGetURL () {
+    public function testGetURLDefaultRoute () {
         $skip = new \Gajus\Skip\Vessel('http://gajus.com/');
 
         $this->assertSame('http://gajus.com/', $skip->url());
@@ -51,6 +51,16 @@ class VesselTest extends PHPUnit_Framework_TestCase {
         $skip = new \Gajus\Skip\Vessel('http://gajus.com/');
 
         $this->assertSame('http://gajus.com/foo', $skip->url('foo'));
+    }
+
+    /**
+     * @expectedException Gajus\Skip\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Route does not exist.
+     */
+    public function testGetURLNotExistingRoute () {
+        $skip = new \Gajus\Skip\Vessel('http://gajus.com/');
+
+        $skip->url('foo', 'foobar');
     }
 
     /**
