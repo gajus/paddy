@@ -57,4 +57,19 @@ class PieonTest extends PHPUnit_Framework_TestCase {
 
         $this->assertSame(['success' => ['test']], $pigeon->getMessages());
     }
+
+    public function testEmptyTemplate () {
+        $pigeon = new \Gajus\Skip\Pigeon();
+
+        $this->assertSame('<ul class="skip-pigeon no-messages"></ul>', $pigeon->template() );
+    }
+
+    public function testTemplate () {
+        $pigeon = new \Gajus\Skip\Pigeon();
+
+        $pigeon->send('a');
+        $pigeon->send('b', 'success');
+
+        $this->assertSame('<ul class="skip-pigeon with-messages"><li>a</li><li>b</li></ul>', $pigeon->template() );
+    }
 }

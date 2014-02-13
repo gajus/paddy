@@ -63,6 +63,29 @@ class Pigeon {
         return isset($this->messages[$namespace]);
     }
 
+    public function template () {
+        $messages = $this->getMessages();
+        $messages_body = '';
+
+        if ($messages) {
+            $container_name = 'skip-pigeon with-messages';
+
+            foreach ($messages as $namespace => $submessages) {
+                foreach ($submessages as $message) {
+                    if (!is_string($message)) {
+                        throw new Exception\UnexpectedValueException('Message is not a string.');
+                    }
+
+                    $messages_body .= '<li>' . $message . '</li>';
+                }
+            }
+        } else {
+            $container_name = 'skip-pigeon no-messages';
+        }
+
+        return '<ul class="' . $container_name . '">' . $messages_body . '</ul>';
+    }
+
     /**
      * Pigeo messages are stored if there is no content displayed.
      * Pigeo messages are discarded if there is content displayed.
