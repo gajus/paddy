@@ -12,36 +12,36 @@ Getting all serious now, – a utility to persist data between requests, generat
 Separates in-application URL generation logic away from controller and template.
 
 ```php
-$vessel = new \Gajus\Skip\Vessel('http://gajus.com/'); // set default route
-$vessel->setRoute('http://static.gajus.com/', 'static'); // set "static" route
+$ship = new \Gajus\Skip\Ship('http://gajus.com/'); // set default route
+$ship->setRoute('http://static.gajus.com/', 'static'); // set "static" route
 
 // Get default route:
 // http://gajus.com/
-$vessel->url();
+$ship->url();
 
 // Get absolute URL for the default route:
 // http://gajus.com/post/1
-$vessel->url('post/1');
+$ship->url('post/1');
 
 // Get absolute URL for the "static" route:
 // http://static.gajus.com/css/frontend.css
-$vessel->url('css/frontend.css', 'static');
+$ship->url('css/frontend.css', 'static');
 ```
 
 ### Redirect
 
 ```php
-// Redirect to $_SERVER['HTTP_REFERER'] or default to $vessel->url():
-$vessel->go();
+// Redirect to $_SERVER['HTTP_REFERER'] or default to $ship->url():
+$ship->go();
 
 // Redirect to the default path:
-$vessel->go( $vessel->url() );
+$ship->go( $ship->url() );
 ```
 
 The above is equivalent to:
 
 ```php
-header('Location: ' . $vessel->url('post/1'));
+header('Location: ' . $ship->url('post/1'));
 
 exit;
 ```
@@ -61,14 +61,14 @@ $pigeon = new \Gajus\Skip\Pigeon();
 
 $pigeon->send('Loaded to the Gunwales!');
 
-$vessel->go('/second');
+$ship->go('/second');
 ```
 
 Pigeon's messages are not removed if page does not produce output beyond headers.
 
 ```php
 // Second page
-$vessel->go('/third');
+$ship->go('/third');
 ```
 
 ```php

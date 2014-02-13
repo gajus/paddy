@@ -1,9 +1,9 @@
 <?php
-class VesselTest extends PHPUnit_Framework_TestCase {
+class ShipTest extends PHPUnit_Framework_TestCase {
     public function testSetDefaultRoute () {
-        $skip = new \Gajus\Skip\Vessel('http://gajus.com/');
+        $ship = new \Gajus\Skip\Ship('http://gajus.com/');
 
-        $this->assertSame('http://gajus.com/', $skip->getRoute('default'));
+        $this->assertSame('http://gajus.com/', $ship->getRoute('default'));
     }
 
     /**
@@ -11,7 +11,7 @@ class VesselTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage Invalid URL.
      */
     public function testSetRouteInvalidURL () {
-        $skip = new \Gajus\Skip\Vessel('foo');
+        $ship = new \Gajus\Skip\Ship('foo');
     }
 
     /**
@@ -19,15 +19,15 @@ class VesselTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage URL does not refer to a directory.
      */
     public function testSetRouteURLNotBase () {
-        $skip = new \Gajus\Skip\Vessel('http://gajus.com');
+        $ship = new \Gajus\Skip\Ship('http://gajus.com');
     }
 
     public function testSetCustomRoute () {
-        $skip = new \Gajus\Skip\Vessel('http://gajus.com/');
+        $ship = new \Gajus\Skip\Ship('http://gajus.com/');
 
-        $skip->setRoute('foo', 'http://gajus.com/foo/');
+        $ship->setRoute('foo', 'http://gajus.com/foo/');
 
-        $this->assertSame('http://gajus.com/foo/', $skip->getRoute('foo'));
+        $this->assertSame('http://gajus.com/foo/', $ship->getRoute('foo'));
     }
 
     /**
@@ -35,22 +35,22 @@ class VesselTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage Cannot overwrite existing route.
      */
     public function testOverwriteExistingRoute () {
-        $skip = new \Gajus\Skip\Vessel('http://gajus.com/');
+        $ship = new \Gajus\Skip\Ship('http://gajus.com/');
 
-        $skip->setRoute('foo', 'http://gajus.com/foo/');
-        $skip->setRoute('foo', 'http://gajus.com/foo/');
+        $ship->setRoute('foo', 'http://gajus.com/foo/');
+        $ship->setRoute('foo', 'http://gajus.com/foo/');
     }
 
     public function testGetURLDefaultRoute () {
-        $skip = new \Gajus\Skip\Vessel('http://gajus.com/');
+        $ship = new \Gajus\Skip\Ship('http://gajus.com/');
 
-        $this->assertSame('http://gajus.com/', $skip->url());
+        $this->assertSame('http://gajus.com/', $ship->url());
     }
 
     public function testGetURLUsingCustomPath () {
-        $skip = new \Gajus\Skip\Vessel('http://gajus.com/');
+        $ship = new \Gajus\Skip\Ship('http://gajus.com/');
 
-        $this->assertSame('http://gajus.com/foo', $skip->url('foo'));
+        $this->assertSame('http://gajus.com/foo', $ship->url('foo'));
     }
 
     /**
@@ -58,9 +58,9 @@ class VesselTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage Route does not exist.
      */
     public function testGetURLNotExistingRoute () {
-        $skip = new \Gajus\Skip\Vessel('http://gajus.com/');
+        $ship = new \Gajus\Skip\Ship('http://gajus.com/');
 
-        $skip->url('foo', 'foobar');
+        $ship->url('foo', 'foobar');
     }
 
     /**
@@ -68,8 +68,8 @@ class VesselTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage Path is not relative to the route URL.
      */
     public function testGetURLUsingAbsoluteCustomPath () {
-        $skip = new \Gajus\Skip\Vessel('http://gajus.com/');
+        $ship = new \Gajus\Skip\Ship('http://gajus.com/');
 
-        $skip->url('/foo');
+        $ship->url('/foo');
     }
 }
