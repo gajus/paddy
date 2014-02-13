@@ -87,7 +87,7 @@ $pigeon->has('error');
 
 ### Displaying messages
 
-You can either check for message presense or you can use template for catching all messages.
+You can either check for message presense or you can use template to catch all messages.
 
 ```php
 $pigeon->send('a');
