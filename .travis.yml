@@ -3,9 +3,6 @@ language: php
 php:
   - "5.5"
 
-env:
-  - DB=mysql
-
 before_script:
  - wget http://getcomposer.org/composer.phar
  - php composer.phar install --dev --no-interaction
