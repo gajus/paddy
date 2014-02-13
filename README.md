@@ -48,24 +48,23 @@ exit;
 
 However, it will throw `Exception\LogicException` exception if [headers have been already sent](http://stackoverflow.com/questions/8028957/how-to-fix-headers-already-sent-error-in-php).
 
-## Bucket
+## Pigeon
 
-> Arr, whether to carry supplies of grog or for the sprogs' first day.
+> Arr, don't go sailin without your parrot.
 
 Temporarily stores the messages in session, then messages can be printed in the next request.
 
-Bucket content is removed from persistence when upon response that results in output.
+Pigeon's messages are removed from persistence upon response that results in output.
 
 ```php
-$bucket = new \Gajus\Skip\Bucket('application name');
+$pigeon = new \Gajus\Skip\Pigeon();
 
-// First page
-$bucket['error'][] = 'Loaded to the Gunwales!';
+$pigeon->send('Loaded to the Gunwales!');
 
 $vessel->go('/second');
 ```
 
-Bucket content is not removed if page does not produce output beyond headers.
+Pigeon's messages are not removed if page does not produce output beyond headers.
 
 ```php
 // Second page
@@ -74,8 +73,8 @@ $vessel->go('/third');
 
 ```php
 // Third page
-if ($bucket['error']) {
-    echo $bucket['error'];
+if ($pigeon->has('error')) {
+    $pigeon->getMessages();
 }
 
 $vessel->go('/fourth');
@@ -84,5 +83,6 @@ $vessel->go('/fourth');
 ```php
 // Fourth page
 
-// $bucket['error'] is empty.
+// Pigeon no longer carries messages about the original error.
+$pigeon->has('error');
 ```
