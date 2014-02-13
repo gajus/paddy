@@ -84,3 +84,27 @@ if ($pigeon->has('error')) {
 // Pigeon no longer carries messages about the original error.
 $pigeon->has('error');
 ```
+
+### Displaying messages
+
+You can either check for message presense or you can use template for catching all messages.
+
+```php
+$pigeon->send('a');
+$pigeon->send('b', 'success');
+
+echo $pigeon->template();
+```
+
+```html
+<ul class="skip-pigeon with-messages">
+    <li>a</li>
+    <li>b</li>
+</ul>
+```
+
+When there are no messages, `template` will produce:
+
+```html
+<ul class="skip-pigeon no-messages"></ul>
+```
