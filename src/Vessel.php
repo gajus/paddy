@@ -44,7 +44,15 @@ class Vessel {
         return $this->map[$name];
     }
 
+    /**
+     * Get absolute URL using either of the predefined routes and path relative to that route.
+     *
+     * @param string $path Relavite path to the route.
+     * @param string $route Route name.
+     */
     public function url ($path = '', $route = 'default') {
+
+
         if (strpos($path, '/') === 0) {
             throw new Exception\InvalidArgumentException('Path is not relative to the route URL.');
         }
@@ -55,10 +63,15 @@ class Vessel {
     }
 
     /**
-     * Redirect 
+     * Redirect user to a URL.
+     * Default to redirect to the referrer or to the default path.
      */
-    public function go ($path, $route = 'default') {
-        header('Location: ' . $this->url($path, $route));
+    public function go ($url = null) {
+        if (is_null($url)) {
+            $url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $this->url();
+        }
+
+        header('Location: ' . $url);
 
         exit;
     }

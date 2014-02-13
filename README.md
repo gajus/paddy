@@ -31,7 +31,11 @@ $vessel->url('css/frontend.css', 'static');
 ### Redirect
 
 ```php
-$vessel->go('post/1');
+// Redirect to $_SERVER['HTTP_REFERER'] or default to $vessel->url():
+$vessel->go();
+
+// Redirect to the default path:
+$vessel->go( $vessel->url() );
 ```
 
 The above is ~equivalent to:
