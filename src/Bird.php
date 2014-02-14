@@ -2,12 +2,12 @@
 namespace Gajus\Skip;
 
 /**
- * Pigeon is a "flash" container used to carry messages between page requests using sessions.
+ * Bird is a "flash" container used to carry messages between page requests using sessions.
  *
  * @link https://github.com/gajus/skip for the canonical source repository
  * @license https://github.com/gajus/skip/blob/master/LICENSE BSD 3-Clause
  */
-class Pigeon {
+class Bird {
     private
         /**
          * @var string $name
@@ -19,16 +19,16 @@ class Pigeon {
         $messages = [];
 
     /**
-     * @param string $name Namespace is used if more than one application is using Pigeon, e.g. frontend and backend interface.
+     * @param string $name Namespace is used if more than one application is using Bird, e.g. frontend and backend interface.
      */
     public function __construct ($name = 'default') {
         if (session_status() == PHP_SESSION_NONE) {
-            throw new Exception\LogicException('Session must be started before using Bucket.');
+            throw new Exception\LogicException('Session must be started before using Bird.');
         }
 
         $this->name = $name;
 
-        $this->messages = isset($_SESSION['gajus']['skip']['pigeon'][$this->getName()]) ? $_SESSION['gajus']['skip']['pigeon'][$this->getName()] : [];
+        $this->messages = isset($_SESSION['gajus']['skip']['bird'][$this->getName()]) ? $_SESSION['gajus']['skip']['bird'][$this->getName()] : [];
     }
 
     /**
@@ -79,7 +79,7 @@ class Pigeon {
         $messages_body = '';
 
         if ($messages) {
-            $container_name = 'skip-pigeon with-messages';
+            $container_name = 'skip-bird with-messages';
 
             foreach ($messages as $namespace => $submessages) {
                 foreach ($submessages as $message) {
@@ -87,7 +87,7 @@ class Pigeon {
                 }
             }
         } else {
-            $container_name = 'skip-pigeon no-messages';
+            $container_name = 'skip-bird no-messages';
         }
 
         return '<ul class="' . $container_name . '">' . $messages_body . '</ul>';
@@ -102,9 +102,9 @@ class Pigeon {
     public function __destruct () {
         register_shutdown_function(function () {
             if (count(array_filter(ob_get_status(true), function ($status) { return $status['buffer_used']; } ))) {
-                $_SESSION['gajus']['skip']['pigeon'][$this->getName()] = [];
+                $_SESSION['gajus']['skip']['bird'][$this->getName()] = [];
             } else {
-                $_SESSION['gajus']['skip']['pigeon'][$this->getName()] = $this->messages;
+                $_SESSION['gajus']['skip']['bird'][$this->getName()] = $this->messages;
             }
         });
     }

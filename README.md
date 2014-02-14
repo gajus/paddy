@@ -48,23 +48,23 @@ exit;
 
 However, it will throw `Exception\LogicException` exception if [headers have been already sent](http://stackoverflow.com/questions/8028957/how-to-fix-headers-already-sent-error-in-php).
 
-## Pigeon
+## Bird
 
 > Arr, don't go sailin without your parrot.
 
 Temporarily stores the messages in session, then messages can be printed in the next request.
 
-Pigeon's messages are removed from persistence upon response that results in output.
+Bird's messages are removed from persistence upon response that results in output.
 
 ```php
-$pigeon = new \Gajus\Skip\Pigeon();
+$bird = new \Gajus\Skip\Bird();
 
-$pigeon->send('Loaded to the Gunwales!');
+$bird->send('Loaded to the Gunwales!');
 
 $ship->go('/second');
 ```
 
-Pigeon's messages are not removed if page does not produce output beyond headers.
+Bird's messages are not removed if page does not produce output beyond headers.
 
 ```php
 // Second page
@@ -73,16 +73,16 @@ $ship->go('/third');
 
 ```php
 // Third page
-if ($pigeon->has('error')) {
-    var_dump($pigeon->getMessages());
+if ($bird->has('error')) {
+    var_dump($bird->getMessages());
 }
 ```
 
 ```php
 // Fourth page
 
-// Pigeon no longer carries messages about the original error.
-$pigeon->has('error');
+// Bird no longer carries messages about the original error.
+$bird->has('error');
 ```
 
 ### Displaying messages
@@ -90,14 +90,14 @@ $pigeon->has('error');
 You can either check for message presense or you can use template to catch all messages.
 
 ```php
-$pigeon->send('a');
-$pigeon->send('b', 'success');
+$bird->send('a');
+$bird->send('b', 'success');
 
-echo $pigeon->template();
+echo $bird->template();
 ```
 
 ```html
-<ul class="skip-pigeon with-messages">
+<ul class="skip-bird with-messages">
     <li>a</li>
     <li>b</li>
 </ul>
@@ -106,5 +106,5 @@ echo $pigeon->template();
 When there are no messages, `template` will produce:
 
 ```html
-<ul class="skip-pigeon no-messages"></ul>
+<ul class="skip-bird no-messages"></ul>
 ```
