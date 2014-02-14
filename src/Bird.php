@@ -98,6 +98,7 @@ class Bird {
      * Pigeo messages are discarded if there is content displayed.
      * 
      * @see http://stackoverflow.com/questions/21737903/how-to-get-content-length-at-the-end-of-request#21737991 Detect if body has been sent to the browser.
+     * @codeCoverageIgnore
      */
     public function __destruct () {
         register_shutdown_function(function () {

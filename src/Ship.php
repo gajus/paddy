@@ -61,17 +61,29 @@ class Ship {
     }
 
     /**
-     * Redirect user to a URL.
-     * Default to redirect to the referrer or to the default path.
+     * Redirect user agent to provided URL.
+     * If no $url provided, redirect to the referrer or
+     * (when referre is not available) to the default path.
+     * 
+     * @see http://benramsey.com/blog/2008/07/http-status-redirection/
+     * @param string|null $url Absolute URL
+     * @return void
+     * @codeCoverageIgnore
      */
-    public function go ($url = null) {
+    public function go ($url = null, $response_code = null) {
         if (headers_sent()) {
             throw new Exception\LogicException('Headers have been already sent.');
+        }
+
+        if (is_null($response_code)) {
+            $response_code = $_SERVER['REQUEST_METHOD'] === 'POST' ? '303' : '302';
         }
 
         if (is_null($url)) {
             $url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $this->url();
         }
+
+        \http_response_code($response_code);
 
         header('Location: ' . $url);
 
