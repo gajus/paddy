@@ -5,15 +5,17 @@
 
 > You can't be a skipper without a great, big vessel and a matey parrot. No nay ne'er!
 
-Getting all serious now, – a utility to persist data between requests, generate URLs and handle redirects.
+Utility to persist data (messages) between requests, generate URLs and handle redirects.
 
 ## URLs
 
-Separates in-application URL generation logic away from controller and template.
+Ship instance carries predefined routes that are used to construct URLs.
 
 ```php
-$ship = new \Gajus\Skip\Ship('http://gajus.com/'); // set default route
-$ship->setRoute('http://static.gajus.com/', 'static'); // set "static" route
+// Set default route:
+$ship = new \Gajus\Skip\Ship('http://gajus.com/');
+// Set "static" route:
+$ship->setRoute('http://static.gajus.com/', 'static');
 
 // Get default route:
 // http://gajus.com/
@@ -34,27 +36,20 @@ $ship->url('css/frontend.css', 'static');
 // Redirect to $_SERVER['HTTP_REFERER'] or default to $ship->url():
 $ship->go();
 
-// Redirect to the default path:
-$ship->go( $ship->url() );
+// Redirect to the default path with status code 307:
+$ship->go( $ship->url(), 307 );
 ```
 
-The above is equivalent to:
+> Redirect status code will default to 303 when current request is POST. 302 otherwise.
 
-```php
-header('Location: ' . $ship->url('post/1'));
 
-exit;
-```
-
-However, it will throw `Exception\LogicException` exception if [headers have been already sent](http://stackoverflow.com/questions/8028957/how-to-fix-headers-already-sent-error-in-php).
+`go` will throw `Exception\LogicException` exception if [headers have been already sent](http://stackoverflow.com/questions/8028957/how-to-fix-headers-already-sent-error-in-php).
 
 ## Bird
 
 > Arr, don't go sailin without your parrot.
 
-Temporarily stores the messages in session, then messages can be printed in the next request.
-
-Bird's messages are removed from persistence upon response that results in output.
+Temporarily stores messages in session, then messages can be printed in the next request.
 
 ```php
 $bird = new \Gajus\Skip\Bird();
@@ -70,6 +65,8 @@ Bird's messages are not removed if page does not produce output beyond headers.
 // Second page
 $ship->go('/third');
 ```
+
+Bird's messages are removed from persistence upon response that results in output.
 
 ```php
 // Third page
