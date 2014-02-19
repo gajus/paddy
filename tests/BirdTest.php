@@ -74,18 +74,18 @@ class BirdTest extends PHPUnit_Framework_TestCase {
         $this->assertSame($bird, $bird->send('test'));
     }
 
-    public function testEmptyTemplate () {
+    public function testEmptyNest () {
         $bird = new \Gajus\Skip\Bird();
 
-        $this->assertSame('<ul class="skip-bird no-messages"></ul>', $bird->template() );
+        $this->assertSame('<ul class="skip-bird-nest no-messages"></ul>', $bird->getNest() );
     }
 
-    public function testTemplate () {
+    public function testNest () {
         $bird = new \Gajus\Skip\Bird();
 
         $bird->send('a');
         $bird->send('b', 'success');
 
-        $this->assertSame('<ul class="skip-bird with-messages"><li>a</li><li>b</li></ul>', $bird->template() );
+        $this->assertSame('<ul class="skip-bird-nest with-messages"><li>a</li><li>b</li></ul>', $bird->getNest() );
     }
 }

@@ -67,19 +67,16 @@ class Bird {
     }
 
     /**
-     * @param string $namespace
-     * @return boolean
+     * Return messages in a container.
+     *
+     * @return string
      */
-    public function has ($namespace) {
-        return isset($this->messages[$namespace]);
-    }
-
-    public function template () {
+    public function getNest () {
         $messages = $this->getMessages();
         $messages_body = '';
 
         if ($messages) {
-            $container_name = 'skip-bird with-messages';
+            $container_name = 'skip-bird-nest with-messages';
 
             foreach ($messages as $namespace => $submessages) {
                 foreach ($submessages as $message) {
@@ -87,10 +84,18 @@ class Bird {
                 }
             }
         } else {
-            $container_name = 'skip-bird no-messages';
+            $container_name = 'skip-bird-nest no-messages';
         }
 
         return '<ul class="' . $container_name . '">' . $messages_body . '</ul>';
+    }
+
+    /**
+     * @param string $namespace
+     * @return boolean
+     */
+    public function has ($namespace) {
+        return isset($this->messages[$namespace]);
     }
 
     /**
