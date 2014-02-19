@@ -29,6 +29,23 @@ class Bird {
         $this->name = $name;
 
         $this->messages = isset($_SESSION['gajus']['skip']['bird'][$this->getName()]) ? $_SESSION['gajus']['skip']['bird'][$this->getName()] : [];
+
+        /**
+         * Messages are stored if there is no content displayed.
+         * Messages are discarded if there is content displayed.
+         *
+         * Do not use __destruct for this, because object can be destructed before the end of the script.
+         * 
+         * @see http://stackoverflow.com/questions/21737903/how-to-get-content-length-at-the-end-of-request#21737991 Detect if body has been sent to the browser.
+         * @codeCoverageIgnore
+         */
+        register_shutdown_function(function () {
+            if (count(array_filter(ob_get_status(true), function ($status) { return $status['buffer_used']; } ))) {
+                $_SESSION['gajus']['skip']['bird'][$this->getName()] = [];
+            } else {
+                $_SESSION['gajus']['skip']['bird'][$this->getName()] = $this->messages;
+            }
+        });
     }
 
     /**
@@ -96,22 +113,5 @@ class Bird {
      */
     public function has ($namespace) {
         return isset($this->messages[$namespace]);
-    }
-
-    /**
-     * Pigeo messages are stored if there is no content displayed.
-     * Pigeo messages are discarded if there is content displayed.
-     * 
-     * @see http://stackoverflow.com/questions/21737903/how-to-get-content-length-at-the-end-of-request#21737991 Detect if body has been sent to the browser.
-     * @codeCoverageIgnore
-     */
-    public function __destruct () {
-        register_shutdown_function(function () {
-            if (count(array_filter(ob_get_status(true), function ($status) { return $status['buffer_used']; } ))) {
-                $_SESSION['gajus']['skip']['bird'][$this->getName()] = [];
-            } else {
-                $_SESSION['gajus']['skip']['bird'][$this->getName()] = $this->messages;
-            }
-        });
     }
 }
