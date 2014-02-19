@@ -97,7 +97,7 @@ class Bird {
 
             foreach ($messages as $namespace => $submessages) {
                 foreach ($submessages as $message) {
-                    $messages_body .= '<li>' . $message . '</li>';
+                    $messages_body .= '<li class="' . $namespace . '">' . $message . '</li>';
                 }
             }
         } else {

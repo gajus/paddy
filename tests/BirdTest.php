@@ -86,6 +86,6 @@ class BirdTest extends PHPUnit_Framework_TestCase {
         $bird->send('a');
         $bird->send('b', 'success');
 
-        $this->assertSame('<ul class="skip-bird-nest with-messages"><li>a</li><li>b</li></ul>', $bird->getNest() );
+        $this->assertSame('<ul class="skip-bird-nest with-messages"><li class="error">a</li><li class="success">b</li></ul>', $bird->getNest() );
     }
 }
