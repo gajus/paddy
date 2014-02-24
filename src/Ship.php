@@ -5,8 +5,12 @@ namespace Gajus\Skip;
  * @link https://github.com/gajus/skip for the canonical source repository
  * @license https://github.com/gajus/skip/blob/master/LICENSE BSD 3-Clause
  */
-class Ship {
+class Ship implements \Psr\Log\LoggerAwareInterface {
     private
+        /**
+         * @var Psr\Log\LoggerInterface
+         */
+        $logger,
         $map = [];
 
     /**
@@ -21,6 +25,10 @@ class Ship {
      * @param string $url URL.
      */
     public function setRoute ($name, $url) {
+        if ($this->logger) {
+            $this->logger->debug('Set route.', ['method' => __METHOD__, 'name' => $name, 'url' => $url]);
+        }
+
         if (isset($this->map[$name])) {
             throw new Exception\InvalidArgumentException('Cannot overwrite existing route.');
         } else if (!filter_var($url, \FILTER_VALIDATE_URL)) {
@@ -71,6 +79,10 @@ class Ship {
      * @codeCoverageIgnore
      */
     public function go ($url = null, $response_code = null) {
+        if ($this->logger) {
+            $this->logger->debug('Go.', ['method' => __METHOD__, 'url' => $url, 'response_code' => $response_code]);
+        }
+
         if (headers_sent()) {
             throw new Exception\LogicException('Headers have been already sent.');
         }
@@ -88,5 +100,15 @@ class Ship {
         header('Location: ' . $url);
 
         exit;
+    }
+
+    /**
+     * Sets a logger instance on the object
+     *
+     * @param LoggerInterface $logger
+     * @return null
+     */
+    public function setLogger (\Psr\Log\LoggerInterface $logger) {
+        $this->logger = $logger;
     }
 }

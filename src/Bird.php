@@ -7,8 +7,12 @@ namespace Gajus\Skip;
  * @link https://github.com/gajus/skip for the canonical source repository
  * @license https://github.com/gajus/skip/blob/master/LICENSE BSD 3-Clause
  */
-class Bird {
+class Bird implements \Psr\Log\LoggerAwareInterface {
     private
+        /**
+         * @var Psr\Log\LoggerInterface
+         */
+        $logger,
         /**
          * @var string $name
          */
@@ -41,8 +45,16 @@ class Bird {
          */
         register_shutdown_function(function () {
             if (count(array_filter(ob_get_status(true), function ($status) { return $status['buffer_used']; } ))) {
+                if ($this->logger) {
+                    $this->logger->debug('Discarding messages because there is content displayed.', ['method' => __METHOD__]);
+                }
+
                 $_SESSION['gajus']['skip']['bird'][$this->getName()] = [];
             } else {
+                if ($this->logger) {
+                    $this->logger->debug('Storing messages because there is content displayed.', ['method' => __METHOD__]);
+                }
+
                 $_SESSION['gajus']['skip']['bird'][$this->getName()] = $this->messages;
             }
         });
@@ -61,6 +73,10 @@ class Bird {
      * @return $this
      */
     public function send ($message, $namespace = 'error') {
+        if ($this->logger) {
+            $this->logger->debug('Sending message.', ['method' => __METHOD__, 'message' => $message, 'namespace' => $namespace]);
+        }
+
         if (!is_string($message)) {
             throw new Exception\UnexpectedValueException('Message is not a string.');
         }
@@ -113,5 +129,15 @@ class Bird {
      */
     public function has ($namespace) {
         return isset($this->messages[$namespace]);
+    }
+
+    /**
+     * Sets a logger instance on the object
+     *
+     * @param LoggerInterface $logger
+     * @return null
+     */
+    public function setLogger (\Psr\Log\LoggerInterface $logger) {
+        $this->logger = $logger;
     }
 }

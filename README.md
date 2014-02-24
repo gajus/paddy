@@ -105,3 +105,7 @@ When there are no messages, `template` will produce:
 ```html
 <ul class="skip-bird no-messages"></ul>
 ```
+
+## Logging
+
+Both classes implement [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md) `LoggerAwareInterface`.
