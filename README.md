@@ -59,14 +59,14 @@ $bird->send('Loaded to the Gunwales!');
 $ship->go('/second');
 ```
 
-Bird's messages are not removed if page does not produce output beyond headers.
+Bird's messages are not removed if page does not produce output:
 
 ```php
 // Second page
 $ship->go('/third');
 ```
 
-Bird's messages are removed from persistence upon response that results in output.
+Bird's messages are removed from session upon response with output:
 
 ```php
 // Third page
@@ -82,9 +82,27 @@ if ($bird->has('error')) {
 $bird->has('error');
 ```
 
-### Displaying messages
+### Sending
 
-You can either check for message presense or you can use template to catch all messages.
+Message is sent using `send` method. The second parameter is used to put message under a namespace. Default namespace is "error".
+
+```php
+$bird->send('There is more grog on the deck!', 'success');
+```
+
+Namespace values are limited to "error", "notice" and "success". Limit is imposed to avoid accidental (hard to catch!) typos. If you would like to change this behaviour, [raise an issue](https://github.com/gajus/skip/issues) providing a use case for an alternative/variable namespace.
+
+### Checking, getting and displaying
+
+To check for any message presence under a specific namespace, use method `has`:
+
+```php
+$bird->has('error');
+```
+
+`getMessages` method returs all of the messages nested under their namespace.
+
+However, you can use the default template to display messages:
 
 ```php
 $bird->send('a');
@@ -95,8 +113,8 @@ echo $bird->template();
 
 ```html
 <ul class="skip-bird with-messages">
-    <li>a</li>
-    <li>b</li>
+    <li class="error">a</li>
+    <li class="success">b</li>
 </ul>
 ```
 

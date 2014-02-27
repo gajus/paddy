@@ -20,19 +20,25 @@ class Bird implements \Psr\Log\LoggerAwareInterface {
         /**
          * @var array $messages
          */
-        $messages = [];
+        $messages = [
+            'error' => [],
+            'notice' => [],
+            'success' => []
+        ];
 
     /**
      * @param string $name Namespace is used if more than one application is using Bird, e.g. frontend and backend interface.
      */
     public function __construct ($name = 'default') {
-        if (session_status() == PHP_SESSION_NONE) {
+        if (session_status() === PHP_SESSION_NONE) {
             throw new Exception\LogicException('Session must be started before using Bird.');
         }
 
         $this->name = $name;
-
         $this->messages = isset($_SESSION['gajus']['skip']['bird'][$this->getName()]) ? $_SESSION['gajus']['skip']['bird'][$this->getName()] : [];
+
+        // Otherwise PHP will pick up Gajus\Skip\Bird::Gajus\Skip\{closure}.
+        $method_name = __METHOD__;
 
         /**
          * Messages are stored if there is no content displayed.
@@ -43,16 +49,16 @@ class Bird implements \Psr\Log\LoggerAwareInterface {
          * @see http://stackoverflow.com/questions/21737903/how-to-get-content-length-at-the-end-of-request#21737991 Detect if body has been sent to the browser.
          * @codeCoverageIgnore
          */
-        register_shutdown_function(function () {
+        register_shutdown_function(function () use ($method_name) {
             if (count(array_filter(ob_get_status(true), function ($status) { return $status['buffer_used']; } ))) {
                 if ($this->logger) {
-                    $this->logger->debug('Discarding messages because there is content displayed.', ['method' => __METHOD__]);
+                    $this->logger->debug('Discarding messages because there is content displayed.', ['method' => $method_name]);
                 }
 
                 $_SESSION['gajus']['skip']['bird'][$this->getName()] = [];
             } else {
                 if ($this->logger) {
-                    $this->logger->debug('Storing messages because there is content displayed.', ['method' => __METHOD__]);
+                    $this->logger->debug('Storing messages because there is content displayed.', ['method' => $method_name]);
                 }
 
                 $_SESSION['gajus']['skip']['bird'][$this->getName()] = $this->messages;
@@ -78,11 +84,11 @@ class Bird implements \Psr\Log\LoggerAwareInterface {
         }
 
         if (!is_string($message)) {
-            throw new Exception\UnexpectedValueException('Message is not a string.');
+            throw new Exception\InvalidArgumentException('Message is not a string.');
         }
 
         if (!isset($this->messages[$namespace])) {
-            $this->messages[$namespace] = [];
+            throw new Exception\InvalidArgumentException('Invalid message namespace.');
         }
 
         $this->messages[$namespace][] = $message;
@@ -124,6 +130,8 @@ class Bird implements \Psr\Log\LoggerAwareInterface {
     }
 
     /**
+     * Check if there are errors in a particular namespace.
+     * 
      * @param string $namespace
      * @return boolean
      */
