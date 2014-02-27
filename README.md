@@ -62,19 +62,19 @@ $_SERVER['HTTPS'] = 'on';
 $_SERVER['HTTP_HOST'] = 'gajus.com';
 $_SERVER['REQUEST_URI'] = '/foo/';
 
-$this->assertSame('/', $ship->getPath());
+$this->assertSame('', $ship->getPath());
 
 $_SERVER['HTTPS'] = 'on';
 $_SERVER['HTTP_HOST'] = 'gajus.com';
 $_SERVER['REQUEST_URI'] = '/foo/bar/';
 
-$this->assertSame('/bar/', $ship->getPath());
+$this->assertSame('bar/', $ship->getPath());
 
 $_SERVER['HTTPS'] = 'on';
 $_SERVER['HTTP_HOST'] = 'gajus.com';
 $_SERVER['REQUEST_URI'] = '/foo/bar/?foo[bar]=1';
 
-$this->assertSame('/bar/', $ship->getPath());
+$this->assertSame('bar/', $ship->getPath());
 ```
 
 ## Bird

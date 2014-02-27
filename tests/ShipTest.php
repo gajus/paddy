@@ -50,7 +50,7 @@ class ShipTest extends PHPUnit_Framework_TestCase {
     public function testGetURLUsingCustomPath () {
         $ship = new \Gajus\Skip\Ship('http://gajus.com/');
 
-        $this->assertSame('http://gajus.com/foo', $ship->url('/foo'));
+        $this->assertSame('http://gajus.com/foo', $ship->url('foo'));
     }
 
     /**
@@ -60,17 +60,17 @@ class ShipTest extends PHPUnit_Framework_TestCase {
     public function testGetURLNotExistingRoute () {
         $ship = new \Gajus\Skip\Ship('http://gajus.com/');
 
-        $ship->url('/foo', 'foobar');
+        $ship->url('foo', 'foobar');
     }
 
     /**
      * @expectedException Gajus\Skip\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Path must start with /.
+     * @expectedExceptionMessage Path is not relative to the route.
      */
     public function testGetURLUsingAbsoluteCustomPath () {
         $ship = new \Gajus\Skip\Ship('http://gajus.com/');
 
-        $ship->url('foo');
+        $ship->url('/foo');
     }
 
     public function testGetPath () {
@@ -80,19 +80,19 @@ class ShipTest extends PHPUnit_Framework_TestCase {
         $_SERVER['HTTP_HOST'] = 'gajus.com';
         $_SERVER['REQUEST_URI'] = '/foo/';
 
-        $this->assertSame('/', $ship->getPath());
+        $this->assertSame('', $ship->getPath());
 
         $_SERVER['HTTPS'] = 'on';
         $_SERVER['HTTP_HOST'] = 'gajus.com';
         $_SERVER['REQUEST_URI'] = '/foo/bar/';
 
-        $this->assertSame('/bar/', $ship->getPath());
+        $this->assertSame('bar/', $ship->getPath());
 
         $_SERVER['HTTPS'] = 'on';
         $_SERVER['HTTP_HOST'] = 'gajus.com';
         $_SERVER['REQUEST_URI'] = '/foo/bar/?foo[bar]=1';
 
-        $this->assertSame('/bar/', $ship->getPath());
+        $this->assertSame('bar/', $ship->getPath());
     }
 
     /**

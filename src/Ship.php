@@ -96,7 +96,7 @@ class Ship implements \Psr\Log\LoggerAwareInterface {
 
         $resource_path = mb_substr($request_path, mb_strlen($base_path));
 
-        return '/' . $resource_path;
+        return $resource_path;
     }
 
     /**
@@ -106,9 +106,9 @@ class Ship implements \Psr\Log\LoggerAwareInterface {
      * @param string $path Relavite path to the route.
      * @param string $route Route name.
      */
-    public function url ($path = '/', $route = 'default') {
-        if (strpos($path, '/') !== 0) {
-            throw new Exception\InvalidArgumentException('Path must start with /.');
+    public function url ($path = '', $route = 'default') {
+        if (strpos($path, '/') === 0) {
+            throw new Exception\InvalidArgumentException('Path is not relative to the route.');
         }
 
         $route = $this->getRoute($route);
