@@ -56,14 +56,14 @@ $bird = new \Gajus\Skip\Bird();
 
 $bird->send('Loaded to the Gunwales!');
 
-$ship->go('/second');
+$ship->go('second');
 ```
 
 Bird's messages are not removed if page does not produce output:
 
 ```php
 // Second page
-$ship->go('/third');
+$ship->go('third');
 ```
 
 Bird's messages are removed from session upon response with output:
