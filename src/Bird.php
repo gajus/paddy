@@ -48,13 +48,13 @@ class Bird implements \Psr\Log\LoggerAwareInterface {
         register_shutdown_function(function () use ($method_name) {
             if (count(array_filter(ob_get_status(true), function ($status) { return $status['buffer_used']; } ))) {
                 if ($this->logger) {
-                    $this->logger->debug('Discarding messages because there is content displayed.', ['method' => $method_name]);
+                    $this->logger->debug('Output buffer. Discarding messages.', ['method' => $method_name]);
                 }
 
                 $_SESSION['gajus']['skip']['bird'][$this->getName()] = [];
             } else {
                 if ($this->logger) {
-                    $this->logger->debug('Storing messages because there is content displayed.', ['method' => $method_name]);
+                    $this->logger->debug('No output buffer. Storring messages.', ['method' => $method_name]);
                 }
 
                 $_SESSION['gajus']['skip']['bird'][$this->getName()] = $this->messages;
