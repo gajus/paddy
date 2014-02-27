@@ -49,6 +49,34 @@ $ship->go( $ship->url(), 307 );
 
 `go` will throw `Exception\LogicException` exception if [headers have been already sent](http://stackoverflow.com/questions/8028957/how-to-fix-headers-already-sent-error-in-php).
 
+### Get path
+
+The iverse of the `url` method is `getPath`. It is used to get the resource path of the current request URI relative to a specific route:
+
+```php
+// Taken from ./tests/ShitTest.php
+
+$ship = new \Gajus\Skip\Ship('https://gajus.com/foo/');
+
+$_SERVER['HTTPS'] = 'on';
+$_SERVER['HTTP_HOST'] = 'gajus.com';
+$_SERVER['REQUEST_URI'] = '/foo/';
+
+$this->assertSame('/', $ship->getPath());
+
+$_SERVER['HTTPS'] = 'on';
+$_SERVER['HTTP_HOST'] = 'gajus.com';
+$_SERVER['REQUEST_URI'] = '/foo/bar/';
+
+$this->assertSame('/bar/', $ship->getPath());
+
+$_SERVER['HTTPS'] = 'on';
+$_SERVER['HTTP_HOST'] = 'gajus.com';
+$_SERVER['REQUEST_URI'] = '/foo/bar/?foo[bar]=1';
+
+$this->assertSame('/bar/', $ship->getPath());
+```
+
 ## Bird
 
 > Arr, don't go sailin without your parrot.

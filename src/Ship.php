@@ -32,6 +32,7 @@ class Ship implements \Psr\Log\LoggerAwareInterface {
      * 
      * @param string $name Route name.
      * @param string $url URL.
+     * @todo Check if query string is included.
      */
     public function setRoute ($name, $url) {
         if ($this->logger) {
@@ -50,15 +51,52 @@ class Ship implements \Psr\Log\LoggerAwareInterface {
     }
 
     /**
-     * @param string $name Route name.
+     * @param string $route_name
      * @return string Route base URL.
      */
-    public function getRoute ($name) {
-        if (!isset($this->routes[$name])) {
+    public function getRoute ($route_name) {
+        if (!isset($this->routes[$route_name])) {
             throw new Exception\InvalidArgumentException('Route does not exist.');
         }
 
-        return $this->routes[$name];
+        return $this->routes[$route_name];
+    }
+
+    /**
+     * This is the inverse of the "url" method. It is used to get the resource path
+     * of the current request URI relative to a specific route.
+     * 
+     * @param string $route_name
+     * @param string $request_uri Absolute request URI, part of which is the base URL path.
+     * @return string Resource path relative to the route.
+     */
+    public function getPath ($route_name = 'default') {
+        $base_url = $this->getRoute($route_name);
+
+        $base_url = parse_url($base_url);
+
+        if ($base_url['scheme'] !== (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http')) {
+            throw new Exception\InvalidArgumentException('Route is using a different scheme.');
+        }
+
+        if ($base_url['host'] !== $_SERVER['HTTP_HOST']) {
+            throw new Exception\InvalidArgumentException('Route has a different host.');
+        }
+
+        $request_path = parse_url($_SERVER['REQUEST_URI'], \PHP_URL_PATH);
+
+        $base_path = $base_url['path'];
+        $request_path = $request_path;
+
+        #var_dump( $base_path, $request_path ); exit;
+
+        if (mb_strpos($request_path, $base_path) !== 0) {
+            throw new Exception\InvalidArgumentException('Request URI does not extend the route.');
+        }
+
+        $resource_path = mb_substr($request_path, mb_strlen($base_path));
+
+        return '/' . $resource_path;
     }
 
     /**
@@ -68,14 +106,14 @@ class Ship implements \Psr\Log\LoggerAwareInterface {
      * @param string $path Relavite path to the route.
      * @param string $route Route name.
      */
-    public function url ($path = '', $route = 'default') {
-        if (strpos($path, '/') === 0) {
-            throw new Exception\InvalidArgumentException('Path is not relative to the route URL.');
+    public function url ($path = '/', $route = 'default') {
+        if (strpos($path, '/') !== 0) {
+            throw new Exception\InvalidArgumentException('Path must start with /.');
         }
 
         $route = $this->getRoute($route);
 
-        return $route . $path;
+        return $route . ltrim($path, '/');
     }
 
     /**

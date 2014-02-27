@@ -50,7 +50,7 @@ class ShipTest extends PHPUnit_Framework_TestCase {
     public function testGetURLUsingCustomPath () {
         $ship = new \Gajus\Skip\Ship('http://gajus.com/');
 
-        $this->assertSame('http://gajus.com/foo', $ship->url('foo'));
+        $this->assertSame('http://gajus.com/foo', $ship->url('/foo'));
     }
 
     /**
@@ -60,16 +60,86 @@ class ShipTest extends PHPUnit_Framework_TestCase {
     public function testGetURLNotExistingRoute () {
         $ship = new \Gajus\Skip\Ship('http://gajus.com/');
 
-        $ship->url('foo', 'foobar');
+        $ship->url('/foo', 'foobar');
     }
 
     /**
      * @expectedException Gajus\Skip\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Path is not relative to the route URL.
+     * @expectedExceptionMessage Path must start with /.
      */
     public function testGetURLUsingAbsoluteCustomPath () {
         $ship = new \Gajus\Skip\Ship('http://gajus.com/');
 
-        $ship->url('/foo');
+        $ship->url('foo');
+    }
+
+    public function testGetPath () {
+        $ship = new \Gajus\Skip\Ship('https://gajus.com/foo/');
+
+        $_SERVER['HTTPS'] = 'on';
+        $_SERVER['HTTP_HOST'] = 'gajus.com';
+        $_SERVER['REQUEST_URI'] = '/foo/';
+
+        $this->assertSame('/', $ship->getPath());
+
+        $_SERVER['HTTPS'] = 'on';
+        $_SERVER['HTTP_HOST'] = 'gajus.com';
+        $_SERVER['REQUEST_URI'] = '/foo/bar/';
+
+        $this->assertSame('/bar/', $ship->getPath());
+
+        $_SERVER['HTTPS'] = 'on';
+        $_SERVER['HTTP_HOST'] = 'gajus.com';
+        $_SERVER['REQUEST_URI'] = '/foo/bar/?foo[bar]=1';
+
+        $this->assertSame('/bar/', $ship->getPath());
+    }
+
+    /**
+     * @expectedException Gajus\Skip\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Route is using a different scheme.
+     */
+    public function testGetPathDifferentScheme () {
+        $ship = new \Gajus\Skip\Ship('http://gajus.com/foo/');
+
+        $_SERVER['HTTPS'] = 'on';
+        $_SERVER['HTTP_HOST'] = 'gajus.com';
+        $_SERVER['REQUEST_URI'] = '/foo/';
+
+        $ship->getPath();
+    }
+
+    /**
+     * @expectedException Gajus\Skip\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Route has a different host.
+     */
+    public function testGetPathDifferentHost () {
+        $ship = new \Gajus\Skip\Ship('https://gajus.com/foo/');
+
+        $_SERVER['HTTPS'] = 'on';
+        $_SERVER['HTTP_HOST'] = 'gajus.io';
+        $_SERVER['REQUEST_URI'] = '/foo/';
+
+        $ship->getPath();
+    }
+
+    /**
+     * @expectedException Gajus\Skip\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Request URI does not extend the route.
+     */
+    public function testGetPathRouteURINotUnderTheRoute () {
+        $ship = new \Gajus\Skip\Ship('https://gajus.com/foo/bar/');
+
+        $_SERVER['HTTPS'] = 'on';
+        $_SERVER['HTTP_HOST'] = 'gajus.com';
+        $_SERVER['REQUEST_URI'] = '/';
+
+        $ship->getPath();
+
+        $_SERVER['HTTPS'] = 'on';
+        $_SERVER['HTTP_HOST'] = 'gajus.com';
+        $_SERVER['REQUEST_URI'] = '/foo/';
+
+        $ship->getPath();
     }
 }
