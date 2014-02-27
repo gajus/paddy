@@ -21,6 +21,10 @@ $ship->setRoute('http://static.gajus.com/', 'static');
 // http://gajus.com/
 $ship->url();
 
+// Get static route:
+// http://static.gajus.com/
+$this->url(null, 'static');
+
 // Get absolute URL for the default route:
 // http://gajus.com/post/1
 $ship->url('post/1');

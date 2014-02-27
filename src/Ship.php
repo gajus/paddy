@@ -2,6 +2,11 @@
 namespace Gajus\Skip;
 
 /**
+ * Skip is a utility for generating URLs relative to predefined routes.
+ * Inject an instance of Ship to your template and use it to generate links.
+ * Then if your URLs schema ever changes, you will be able to adjust it in the
+ * Ship configuration, subject to that resource path does not change.
+ * 
  * @link https://github.com/gajus/skip for the canonical source repository
  * @license https://github.com/gajus/skip/blob/master/LICENSE BSD 3-Clause
  */
@@ -11,7 +16,10 @@ class Ship implements \Psr\Log\LoggerAwareInterface {
          * @var Psr\Log\LoggerInterface
          */
         $logger,
-        $map = [];
+        /**
+         * @array $routes
+         */
+        $routes = [];
 
     /**
      * @param string $url Default route URL.
@@ -21,6 +29,7 @@ class Ship implements \Psr\Log\LoggerAwareInterface {
     }
 
     /**
+     * 
      * @param string $name Route name.
      * @param string $url URL.
      */
@@ -29,7 +38,7 @@ class Ship implements \Psr\Log\LoggerAwareInterface {
             $this->logger->debug('Set route.', ['method' => __METHOD__, 'name' => $name, 'url' => $url]);
         }
 
-        if (isset($this->map[$name])) {
+        if (isset($this->routes[$name])) {
             throw new Exception\InvalidArgumentException('Cannot overwrite existing route.');
         } else if (!filter_var($url, \FILTER_VALIDATE_URL)) {
             throw new Exception\InvalidArgumentException('Invalid URL.');
@@ -37,7 +46,7 @@ class Ship implements \Psr\Log\LoggerAwareInterface {
             throw new Exception\InvalidArgumentException('URL does not refer to a directory.');
         }
 
-        $this->map[$name] = $url;
+        $this->routes[$name] = $url;
     }
 
     /**
@@ -45,15 +54,16 @@ class Ship implements \Psr\Log\LoggerAwareInterface {
      * @return string Route base URL.
      */
     public function getRoute ($name) {
-        if (!isset($this->map[$name])) {
+        if (!isset($this->routes[$name])) {
             throw new Exception\InvalidArgumentException('Route does not exist.');
         }
 
-        return $this->map[$name];
+        return $this->routes[$name];
     }
 
     /**
-     * Get absolute URL using either of the predefined routes and path relative to that route.
+     * Get absolute URL using either of the predefined routes.
+     * Requested resource path is appended to the route.
      *
      * @param string $path Relavite path to the route.
      * @param string $route Route name.
