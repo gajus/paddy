@@ -20,11 +20,7 @@ class Bird implements \Psr\Log\LoggerAwareInterface {
         /**
          * @var array $messages
          */
-        $messages = [
-            'error' => [],
-            'notice' => [],
-            'success' => []
-        ];
+        $messages = [];
 
     /**
      * @param string $name Namespace is used if more than one application is using Bird, e.g. frontend and backend interface.
@@ -87,7 +83,8 @@ class Bird implements \Psr\Log\LoggerAwareInterface {
             throw new Exception\InvalidArgumentException('Message is not a string.');
         }
 
-        if (!isset($this->messages[$namespace])) {
+        // Limit namespace to [success, error, notice] (to avoid typos).
+        if (!in_array($namespace, ['success', 'error', 'notice'], true)) {
             throw new Exception\InvalidArgumentException('Invalid message namespace.');
         }
 
@@ -144,6 +141,7 @@ class Bird implements \Psr\Log\LoggerAwareInterface {
      *
      * @param LoggerInterface $logger
      * @return null
+     * @codeCoverageIgnore
      */
     public function setLogger (\Psr\Log\LoggerInterface $logger) {
         $this->logger = $logger;

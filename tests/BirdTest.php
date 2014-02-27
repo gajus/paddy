@@ -42,7 +42,7 @@ class BirdTest extends PHPUnit_Framework_TestCase {
         $this->assertSame(['error' => ['test']], $bird->getMessages());
     }
 
-    public function testSendMessageDefaultNamespace () {
+    public function testSendMessageImplicitNamespace () {
         $bird = new \Gajus\Skip\Bird();
 
         $bird->send('test');
@@ -50,16 +50,40 @@ class BirdTest extends PHPUnit_Framework_TestCase {
         $this->assertSame(['error' => ['test']], $bird->getMessages());
     }
 
-    public function testSendMessageCustomNamespace () {
+    /**
+     * @dataProvider sendMessageExplicitNamespaceProvider
+     */
+    public function testSendMessageExplicitNamespace ($namespace) {
         $bird = new \Gajus\Skip\Bird();
 
-        $bird->send('test', 'success');
+        $bird->send('test', $namespace);
 
-        $this->assertSame(['success' => ['test']], $bird->getMessages());
+        $messages = [];
+        $messages[$namespace] = ['test'];
+
+        $this->assertSame($messages, $bird->getMessages());
+    }
+
+    public function sendMessageExplicitNamespaceProvider () {
+        return [
+            ['success'],
+            ['error'],
+            ['notice']
+        ];
     }
 
     /**
-     * @expectedException Gajus\Skip\Exception\UnexpectedValueException
+     * @expectedException Gajus\Skip\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Invalid message namespace.
+     */
+    public function testSendMessageUnexpectedNamespace () {
+        $bird = new \Gajus\Skip\Bird();
+
+        $bird->send('test', 'foo');
+    }
+
+    /**
+     * @expectedException Gajus\Skip\Exception\InvalidArgumentException
      * @expectedExceptionMessage Message is not a string.
      */
     public function testSendMessageNotString () {
