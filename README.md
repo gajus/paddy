@@ -92,7 +92,7 @@ $bird->send('There is more grog on the deck!', 'success');
 
 Namespace values are limited to "error", "notice" and "success". Limit is imposed to avoid accidental (hard to catch!) typos. If you would like to change this behaviour, [raise an issue](https://github.com/gajus/skip/issues) providing a use case for an alternative/variable namespace.
 
-### Checking, getting and displaying
+### Checking for presence, getting and displaying
 
 To check for any message presence under a specific namespace, use method `has`:
 
