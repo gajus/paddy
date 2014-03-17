@@ -79,7 +79,7 @@ class Ship implements \Psr\Log\LoggerAwareInterface {
             throw new Exception\InvalidArgumentException('Route is using a different scheme.');
         }
 
-        if ($base_url['host'] !== $_SERVER['HTTP_HOST']) {
+        if ($base_url['host'] !== $_SERVER['SERVER_NAME']) {
             throw new Exception\InvalidArgumentException('Route has a different host.');
         }
 
