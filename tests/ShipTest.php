@@ -77,19 +77,19 @@ class ShipTest extends PHPUnit_Framework_TestCase {
         $ship = new \Gajus\Skip\Ship('https://gajus.com/foo/');
 
         $_SERVER['HTTPS'] = 'on';
-        $_SERVER['HTTP_HOST'] = 'gajus.com';
+        $_SERVER['SERVER_NAME'] = 'gajus.com';
         $_SERVER['REQUEST_URI'] = '/foo/';
 
         $this->assertSame('', $ship->getPath());
 
         $_SERVER['HTTPS'] = 'on';
-        $_SERVER['HTTP_HOST'] = 'gajus.com';
+        $_SERVER['SERVER_NAME'] = 'gajus.com';
         $_SERVER['REQUEST_URI'] = '/foo/bar/';
 
         $this->assertSame('bar/', $ship->getPath());
 
         $_SERVER['HTTPS'] = 'on';
-        $_SERVER['HTTP_HOST'] = 'gajus.com';
+        $_SERVER['SERVER_NAME'] = 'gajus.com';
         $_SERVER['REQUEST_URI'] = '/foo/bar/?foo[bar]=1';
 
         $this->assertSame('bar/', $ship->getPath());
@@ -103,7 +103,7 @@ class ShipTest extends PHPUnit_Framework_TestCase {
         $ship = new \Gajus\Skip\Ship('http://gajus.com/foo/');
 
         $_SERVER['HTTPS'] = 'on';
-        $_SERVER['HTTP_HOST'] = 'gajus.com';
+        $_SERVER['SERVER_NAME'] = 'gajus.com';
         $_SERVER['REQUEST_URI'] = '/foo/';
 
         $ship->getPath();
@@ -117,7 +117,7 @@ class ShipTest extends PHPUnit_Framework_TestCase {
         $ship = new \Gajus\Skip\Ship('https://gajus.com/foo/');
 
         $_SERVER['HTTPS'] = 'on';
-        $_SERVER['HTTP_HOST'] = 'gajus.io';
+        $_SERVER['SERVER_NAME'] = 'gajus.io';
         $_SERVER['REQUEST_URI'] = '/foo/';
 
         $ship->getPath();
@@ -131,13 +131,13 @@ class ShipTest extends PHPUnit_Framework_TestCase {
         $ship = new \Gajus\Skip\Ship('https://gajus.com/foo/bar/');
 
         $_SERVER['HTTPS'] = 'on';
-        $_SERVER['HTTP_HOST'] = 'gajus.com';
+        $_SERVER['SERVER_NAME'] = 'gajus.com';
         $_SERVER['REQUEST_URI'] = '/';
 
         $ship->getPath();
 
         $_SERVER['HTTPS'] = 'on';
-        $_SERVER['HTTP_HOST'] = 'gajus.com';
+        $_SERVER['SERVER_NAME'] = 'gajus.com';
         $_SERVER['REQUEST_URI'] = '/foo/';
 
         $ship->getPath();
