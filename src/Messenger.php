@@ -73,10 +73,10 @@ class Messenger implements \Psr\Log\LoggerAwareInterface {
 
     /**
      * @param string $message
-     * @param string $namespace
+     * @param string $namespace Message namespace (success, error or notice).
      * @return $this
      */
-    public function send ($message, $namespace = 'error') {
+    public function send ($message) {
         $this->logger->debug('Sending message.', ['method' => __METHOD__, 'message' => $message, 'namespace' => $namespace]);
         
         if (!is_string($message)) {
@@ -91,6 +91,36 @@ class Messenger implements \Psr\Log\LoggerAwareInterface {
         $this->messages[$namespace][] = $message;
 
         return $this;
+    }
+
+    /**
+     * Shorthand method to send message under "error" namespace.
+     *
+     * @param string $message
+     * @return $this
+     */
+    public function error ($message) {
+        return $this->send($message, 'error');
+    }
+
+    /**
+     * Shorthand method to send message under "success" namespace.
+     *
+     * @param string $message
+     * @return $this
+     */
+    public function success ($message) {
+        return $this->send($message, 'success');
+    }
+
+    /**
+     * Shorthand method to send message under "notice" namespace.
+     *
+     * @param string $message
+     * @return $this
+     */
+    public function notice ($message) {
+        return $this->notice($message, 'notice');
     }
 
     /**
