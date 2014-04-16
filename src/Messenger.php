@@ -2,36 +2,42 @@
 namespace Gajus\Skip;
 
 /**
- * Bird is a "flash" container used to carry messages between page requests using sessions.
+ * Messenger is a "flash" container used to carry messages between page requests using sessions.
  *
  * @link https://github.com/gajus/skip for the canonical source repository
  * @license https://github.com/gajus/skip/blob/master/LICENSE BSD 3-Clause
  */
-class Bird implements \Psr\Log\LoggerAwareInterface {
+class Messenger implements \Psr\Log\LoggerAwareInterface {
     private
         /**
          * @var Psr\Log\LoggerInterface
          */
         $logger,
         /**
-         * @var string $name
+         * @var string $namespace
          */
-        $name,
+        $namespace,
         /**
          * @var array $messages
          */
         $messages = [];
 
     /**
-     * @param string $name Namespace is used if more than one application is using Bird, e.g. frontend and backend interface.
+     * @param string $namespace Namespace is used if more than one application is using Messenger. Defaults to the SERVER_NAME or "default".
      */
-    public function __construct ($name = 'default') {
+    public function __construct ($namespace = null) {
+        $this->logger = new \Psr\Log\NullLogger;
+
         if (session_status() === PHP_SESSION_NONE) {
             throw new Exception\LogicException('Session must be started before using Bird.');
         }
 
-        $this->name = $name;
-        $this->messages = isset($_SESSION['gajus']['skip']['bird'][$this->getName()]) ? $_SESSION['gajus']['skip']['bird'][$this->getName()] : [];
+        if ($namespace === null) {
+            $namespace = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'default';
+        }
+
+        $this->namespace = $namespace;
+        $this->messages = isset($_SESSION['gajus']['paddy']['messenger'][$this->getNamespace()]) ? $_SESSION['gajus']['paddy']['messenger'][$this->getNamespace()] : [];
 
         // Otherwise PHP will pick up Gajus\Skip\Bird::Gajus\Skip\{closure}.
         $method_name = __METHOD__;
@@ -47,17 +53,13 @@ class Bird implements \Psr\Log\LoggerAwareInterface {
          */
         register_shutdown_function(function () use ($method_name) {
             if (count(array_filter(ob_get_status(true), function ($status) { return $status['buffer_used']; } ))) {
-                if ($this->logger) {
-                    $this->logger->debug('Output buffer. Discarding messages.', ['method' => $method_name]);
-                }
-
-                $_SESSION['gajus']['skip']['bird'][$this->getName()] = [];
+                $this->logger->debug('Output buffer. Discarding messages.', ['method' => $method_name]);
+                
+                $_SESSION['gajus']['paddy']['messenger'][$this->getNamespace()] = [];
             } else {
-                if ($this->logger) {
-                    $this->logger->debug('No output buffer. Storring messages.', ['method' => $method_name]);
-                }
-
-                $_SESSION['gajus']['skip']['bird'][$this->getName()] = $this->messages;
+                $this->logger->debug('No output buffer. Storring messages.', ['method' => $method_name]);
+    
+                $_SESSION['gajus']['paddy']['messenger'][$this->getNamespace()] = $this->messages;
             }
         });
     }
@@ -65,8 +67,8 @@ class Bird implements \Psr\Log\LoggerAwareInterface {
     /**
      * @return string
      */
-    public function getName () {
-        return $this->name;
+    public function getNamespace () {
+        return $this->namespace;
     }
 
     /**
@@ -75,10 +77,8 @@ class Bird implements \Psr\Log\LoggerAwareInterface {
      * @return $this
      */
     public function send ($message, $namespace = 'error') {
-        if ($this->logger) {
-            $this->logger->debug('Sending message.', ['method' => __METHOD__, 'message' => $message, 'namespace' => $namespace]);
-        }
-
+        $this->logger->debug('Sending message.', ['method' => __METHOD__, 'message' => $message, 'namespace' => $namespace]);
+        
         if (!is_string($message)) {
             throw new Exception\InvalidArgumentException('Message is not a string.');
         }

@@ -1,27 +1,27 @@
 <?php
-class BirdTest extends PHPUnit_Framework_TestCase {
+class MessengerTest extends PHPUnit_Framework_TestCase {
     public function setUp () {
         @session_start();
     }
 
     /**
-     * @expectedException Gajus\Skip\Exception\LogicException
+     * @expectedException Gajus\Paddy\Exception\LogicException
      * @expectedExceptionMessage Session must be started before using Bird.
      */
     public function testInitialiseWithoutSession () {
         session_destroy();
 
-        new \Gajus\Skip\Bird();
+        new \Gajus\Paddy\Messenger();
     }
 
     public function testGetDefaultBirdName () {
-        $bird = new \Gajus\Skip\Bird();
+        $bird = new \Gajus\Paddy\Messenger();
 
         $this->assertSame('default', $bird->getName());
     }
 
     public function testSetBirdName () {
-        $bird = new \Gajus\Skip\Bird('john');
+        $bird = new \Gajus\Paddy\Messenger('john');
 
         $this->assertSame('john', $bird->getName());
     }
@@ -29,7 +29,7 @@ class BirdTest extends PHPUnit_Framework_TestCase {
     public function testHasMessage () {
         $_SESSION['gajus']['skip']['bird']['john'] = ['error' => ['test']];
 
-        $bird = new \Gajus\Skip\Bird('john');
+        $bird = new \Gajus\Paddy\Messenger('john');
 
         $this->assertTrue($bird->has('error'));
     }
@@ -37,13 +37,13 @@ class BirdTest extends PHPUnit_Framework_TestCase {
     public function testGetMessages () {
         $_SESSION['gajus']['skip']['bird']['john'] = ['error' => ['test']];
 
-        $bird = new \Gajus\Skip\Bird('john');
+        $bird = new \Gajus\Paddy\Messenger('john');
 
         $this->assertSame(['error' => ['test']], $bird->getMessages());
     }
 
     public function testSendMessageImplicitNamespace () {
-        $bird = new \Gajus\Skip\Bird();
+        $bird = new \Gajus\Paddy\Messenger();
 
         $bird->send('test');
 
@@ -54,7 +54,7 @@ class BirdTest extends PHPUnit_Framework_TestCase {
      * @dataProvider sendMessageExplicitNamespaceProvider
      */
     public function testSendMessageExplicitNamespace ($namespace) {
-        $bird = new \Gajus\Skip\Bird();
+        $bird = new \Gajus\Paddy\Messenger();
 
         $bird->send('test', $namespace);
 
@@ -73,43 +73,43 @@ class BirdTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Gajus\Skip\Exception\InvalidArgumentException
+     * @expectedException Gajus\Paddy\Exception\InvalidArgumentException
      * @expectedExceptionMessage Invalid message namespace.
      */
     public function testSendMessageUnexpectedNamespace () {
-        $bird = new \Gajus\Skip\Bird();
+        $bird = new \Gajus\Paddy\Messenger();
 
         $bird->send('test', 'foo');
     }
 
     /**
-     * @expectedException Gajus\Skip\Exception\InvalidArgumentException
+     * @expectedException Gajus\Paddy\Exception\InvalidArgumentException
      * @expectedExceptionMessage Message is not a string.
      */
     public function testSendMessageNotString () {
-        $bird = new \Gajus\Skip\Bird();
+        $bird = new \Gajus\Paddy\Messenger();
 
         $bird->send(['test']);
     }
 
     public function testSendMessageReturnBird () {
-        $bird = new \Gajus\Skip\Bird();
+        $bird = new \Gajus\Paddy\Messenger();
 
         $this->assertSame($bird, $bird->send('test'));
     }
 
     public function testEmptyNest () {
-        $bird = new \Gajus\Skip\Bird();
+        $bird = new \Gajus\Paddy\Messenger();
 
-        $this->assertSame('<ul class="skip-bird-nest no-messages"></ul>', $bird->getNest() );
+        $this->assertSame('<ul class="paddy-messenger-nest no-messages"></ul>', $bird->getNest() );
     }
 
     public function testNest () {
-        $bird = new \Gajus\Skip\Bird();
+        $bird = new \Gajus\Paddy\Messenger();
 
         $bird->send('a');
         $bird->send('b', 'success');
 
-        $this->assertSame('<ul class="skip-bird-nest with-messages"><li class="error">a</li><li class="success">b</li></ul>', $bird->getNest() );
+        $this->assertSame('<ul class="paddy-messenger-nest with-messages"><li class="error">a</li><li class="success">b</li></ul>', $bird->getNest() );
     }
 }

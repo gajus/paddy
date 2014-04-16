@@ -1,8 +1,8 @@
 {
-	"name": "gajus/skip",
-	"description": "Navigation and messaging utility.",
-	"keywords": ["url", "flash", "session", "message", "redirect"],
-	"homepage": "https://github.com/gajus/skip",
+	"name": "gajus/paddy",
+	"description": "Session based (flash) messaging utility.",
+	"keywords": ["flash", "message"],
+	"homepage": "https://github.com/gajus/paddy",
 	"type": "library",
 	"license": "BSD-3-Clause",
 	"authors": [
@@ -12,7 +12,7 @@
 		}
 	],
 	"require": {
-		"php": ">=5.5"
+		"php": ">=5.4"
 	},
 	"require-dev": {
 	    "satooshi/php-coveralls": "dev-master",
@@ -20,7 +20,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Gajus\\Skip\\": "src/"
+			"Gajus\\Paddy\\": "src/"
 		}
 	}
 }
