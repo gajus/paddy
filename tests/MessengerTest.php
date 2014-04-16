@@ -123,7 +123,7 @@ class MessengerTest extends PHPUnit_Framework_TestCase {
     public function testEmptyNest () {
         $messenger = new \Gajus\Paddy\Messenger();
 
-        $this->assertSame('<ul class="paddy-messenger-nest no-messages"></ul>', $messenger->getNest() );
+        $this->assertSame('<ul class="paddy-messenger-nest no-messages"></ul>', $messenger->getMessageHolder() );
     }
 
     public function testNest () {
@@ -132,6 +132,6 @@ class MessengerTest extends PHPUnit_Framework_TestCase {
         $messenger->send('a', 'error');
         $messenger->send('b', 'success');
 
-        $this->assertSame('<ul class="paddy-messenger-nest with-messages"><li class="error">a</li><li class="success">b</li></ul>', $messenger->getNest() );
+        $this->assertSame('<ul class="paddy-messenger-nest with-messages"><li class="error">a</li><li class="success">b</li></ul>', $messenger->getMessageHolder() );
     }
 }

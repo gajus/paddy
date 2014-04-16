@@ -21,7 +21,7 @@ $messenger = new \Gajus\Paddy\Messenger();
 $messenger->send('Loaded to the Gunwales!');
 ```
 
-## Sending
+## Sending a Message
 
 Message is sent using `send` method. The second parameter is used to put message under a namespace.
 
@@ -29,27 +29,42 @@ Message is sent using `send` method. The second parameter is used to put message
 $messenger->send('There is more grog on the deck!', 'success');
 ```
 
-Namespace values are limited to "error", "notice" and "success". Limit is imposed to avoid accidental (and hard to catch) typos. If you would like to change this behaviour, [raise an issue](https://github.com/gajus/skip/issues) providing a use case for an alternative or variable namespace.
+Namespace values are limited to "error", "notice" and "success". Limit is imposed to avoid accidental (and hard to catch) typos. If you would like to change this behaviour, [raise an issue](https://github.com/gajus/skip/issues) including an example use case for an alternative or a variable namespace.
 
-## Getting
+## Getting Messages
 
-To check for any message presence under a specific namespace, use method `has`:
+To get all messages nested under the respective namespace, use `getMessages` method:
 
 ```php
+/**
+ * Return all messages nested under the respective message namespace.
+ * 
+ * @return array
+ */
+$messenger->getMessages();
+```
+
+To check if there are messages under a specific namespace, use `has` method:
+
+```php
+/**
+ * Check if there are messages under the specified message namespace.
+ * 
+ * @param string $namespace
+ * @return boolean
+ */
 $messenger->has('error');
 ```
 
-`getMessages` method returs all of the messages under their namespace.
-
 ### Templates
 
-However, you can use the default template to display messages:
+You can use the default template to display messages:
 
 ```php
 $messenger->send('a');
 $messenger->send('b', 'success');
 
-echo $messenger->template();
+echo $messenger->getMessageHolder();
 ```
 
 ```html
@@ -59,7 +74,7 @@ echo $messenger->template();
 </ul>
 ```
 
-When there are no messages, `template` will produce:
+When there are no messages, `getMessageHolder` will produce:
 
 ```html
 <ul class="paddy-messenger no-messages"></ul>

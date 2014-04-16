@@ -124,7 +124,7 @@ class Messenger implements \Psr\Log\LoggerAwareInterface {
     }
 
     /**
-     * Return all messages.
+     * Return all messages nested under the respective message namespace.
      * 
      * @return array
      */
@@ -137,7 +137,7 @@ class Messenger implements \Psr\Log\LoggerAwareInterface {
      *
      * @return string
      */
-    public function getNest () {
+    public function getMessageHolder () {
         $messages = $this->getMessages();
         $messages_body = '';
 
@@ -157,7 +157,7 @@ class Messenger implements \Psr\Log\LoggerAwareInterface {
     }
 
     /**
-     * Check if there are errors in a particular namespace.
+     * Check if there are messages under the specified message namespace.
      * 
      * @param string $namespace
      * @return boolean
