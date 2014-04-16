@@ -58,7 +58,7 @@ class MessengerTest extends PHPUnit_Framework_TestCase {
 
         $this->assertFalse($messenger->has($namespace));
 
-        $messenger->send('test', $namespace);
+        $this->assertInstanceOf('Gajus\Paddy\Messenger', $messenger->send('test', $namespace));
 
         $messages = [];
         $messages[$namespace] = ['test'];
@@ -76,7 +76,7 @@ class MessengerTest extends PHPUnit_Framework_TestCase {
 
         $this->assertFalse($messenger->has($namespace));
 
-        $messenger->{$namespace}('test');
+        $this->assertInstanceOf('Gajus\Paddy\Messenger', $messenger->{$namespace}('test'));
 
         $messages = [];
         $messages[$namespace] = ['test'];
