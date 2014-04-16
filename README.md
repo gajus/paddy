@@ -56,9 +56,9 @@ To check if there are messages under a specific namespace, use `has` method:
 $messenger->has('error');
 ```
 
-### Templates
+### Message Holder
 
-You can use the default template to display messages:
+Use the message holder when you intend to display messages to the end user:
 
 ```php
 $messenger->send('a');
@@ -79,6 +79,8 @@ When there are no messages, `getMessageHolder` will produce:
 ```html
 <ul class="paddy-messenger no-messages"></ul>
 ```
+
+The empty tag is used for interoperability with the frontend script.
 
 ## Shorthand
 
