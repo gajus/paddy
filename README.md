@@ -103,19 +103,22 @@ public function notice ($message) {
 
 Messages are carried across pages using `$_SESSION` variable. This requires that you start session before using Paddy.
 
-```php Page 1
+```php
+// Page 1
 $messenger->error('foo');
 ```
 
 Requests that result in header-only response continue to persist message data:
 
-```php Page 2
+```php
+// Page 2
 header('Location: Page 3');
 ```
 
 Messages are removed from session upon request resulting in ouput or without `Location:` header.
 
-```php Page 3
+```php
+// Page 3
 var_dump($messenger->has('error'));
 ```
 
