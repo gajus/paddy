@@ -14,20 +14,28 @@ class MessengerTest extends PHPUnit_Framework_TestCase {
         new \Gajus\Paddy\Messenger();
     }
 
-    public function testGetDefaultBirdName () {
+    public function testGetDefaultBirdNameNoServername () {
         $bird = new \Gajus\Paddy\Messenger();
 
-        $this->assertSame('default', $bird->getName());
+        $this->assertSame('default', $bird->getNamespace());
+    }
+
+    public function testGetDefaultBirdNameWithServername () {
+        $_SERVER['SERVER_NAME'] = 'gajus.com';
+
+        $bird = new \Gajus\Paddy\Messenger();
+
+        $this->assertSame('gajus.com', $bird->getNamespace());
     }
 
     public function testSetBirdName () {
         $bird = new \Gajus\Paddy\Messenger('john');
 
-        $this->assertSame('john', $bird->getName());
+        $this->assertSame('john', $bird->getNamespace());
     }
 
     public function testHasMessage () {
-        $_SESSION['gajus']['skip']['bird']['john'] = ['error' => ['test']];
+        $_SESSION['gajus']['paddy']['messenger']['john'] = ['error' => ['test']];
 
         $bird = new \Gajus\Paddy\Messenger('john');
 
@@ -35,7 +43,7 @@ class MessengerTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testGetMessages () {
-        $_SESSION['gajus']['skip']['bird']['john'] = ['error' => ['test']];
+        $_SESSION['gajus']['paddy']['messenger']['john'] = ['error' => ['test']];
 
         $bird = new \Gajus\Paddy\Messenger('john');
 

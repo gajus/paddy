@@ -1,11 +1,11 @@
 <?php
-namespace Gajus\Skip;
+namespace Gajus\Paddy;
 
 /**
  * Messenger is a "flash" container used to carry messages between page requests using sessions.
  *
- * @link https://github.com/gajus/skip for the canonical source repository
- * @license https://github.com/gajus/skip/blob/master/LICENSE BSD 3-Clause
+ * @link https://github.com/gajus/paddy for the canonical source repository
+ * @license https://github.com/gajus/paddy/blob/master/LICENSE BSD 3-Clause
  */
 class Messenger implements \Psr\Log\LoggerAwareInterface {
     private
@@ -39,7 +39,7 @@ class Messenger implements \Psr\Log\LoggerAwareInterface {
         $this->namespace = $namespace;
         $this->messages = isset($_SESSION['gajus']['paddy']['messenger'][$this->getNamespace()]) ? $_SESSION['gajus']['paddy']['messenger'][$this->getNamespace()] : [];
 
-        // Otherwise PHP will pick up Gajus\Skip\Bird::Gajus\Skip\{closure}.
+        // Otherwise PHP will pick up Gajus\Paddy\Messenger::Gajus\Paddy\{closure}.
         $method_name = __METHOD__;
 
         /**
@@ -112,7 +112,7 @@ class Messenger implements \Psr\Log\LoggerAwareInterface {
         $messages_body = '';
 
         if ($messages) {
-            $container_name = 'skip-bird-nest with-messages';
+            $container_name = 'paddy-messenger-nest with-messages';
 
             foreach ($messages as $namespace => $submessages) {
                 foreach ($submessages as $message) {
@@ -120,7 +120,7 @@ class Messenger implements \Psr\Log\LoggerAwareInterface {
                 }
             }
         } else {
-            $container_name = 'skip-bird-nest no-messages';
+            $container_name = 'paddy-messenger-nest no-messages';
         }
 
         return '<ul class="' . $container_name . '">' . $messages_body . '</ul>';
