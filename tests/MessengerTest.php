@@ -14,62 +14,76 @@ class MessengerTest extends PHPUnit_Framework_TestCase {
         new \Gajus\Paddy\Messenger();
     }
 
-    public function testGetDefaultBirdNameNoServername () {
-        $bird = new \Gajus\Paddy\Messenger();
+    public function testGetDefaultNameNoServername () {
+        $messenger = new \Gajus\Paddy\Messenger();
 
-        $this->assertSame('default', $bird->getNamespace());
+        $this->assertSame('default', $messenger->getNamespace());
     }
 
-    public function testGetDefaultBirdNameWithServername () {
+    public function testGetDefaultNameWithServername () {
         $_SERVER['SERVER_NAME'] = 'gajus.com';
 
-        $bird = new \Gajus\Paddy\Messenger();
+        $messenger = new \Gajus\Paddy\Messenger();
 
-        $this->assertSame('gajus.com', $bird->getNamespace());
+        $this->assertSame('gajus.com', $messenger->getNamespace());
     }
 
-    public function testSetBirdName () {
-        $bird = new \Gajus\Paddy\Messenger('john');
+    public function testSetNamespace () {
+        $messenger = new \Gajus\Paddy\Messenger('john');
 
-        $this->assertSame('john', $bird->getNamespace());
+        $this->assertSame('john', $messenger->getNamespace());
     }
 
     public function testHasMessage () {
         $_SESSION['gajus']['paddy']['messenger']['john'] = ['error' => ['test']];
 
-        $bird = new \Gajus\Paddy\Messenger('john');
+        $messenger = new \Gajus\Paddy\Messenger('john');
 
-        $this->assertTrue($bird->has('error'));
+        $this->assertTrue($messenger->has('error'));
     }
 
     public function testGetMessages () {
         $_SESSION['gajus']['paddy']['messenger']['john'] = ['error' => ['test']];
 
-        $bird = new \Gajus\Paddy\Messenger('john');
+        $messenger = new \Gajus\Paddy\Messenger('john');
 
-        $this->assertSame(['error' => ['test']], $bird->getMessages());
-    }
-
-    public function testSendMessageImplicitNamespace () {
-        $bird = new \Gajus\Paddy\Messenger();
-
-        $bird->send('test');
-
-        $this->assertSame(['error' => ['test']], $bird->getMessages());
+        $this->assertSame(['error' => ['test']], $messenger->getMessages());
     }
 
     /**
      * @dataProvider sendMessageExplicitNamespaceProvider
      */
     public function testSendMessageExplicitNamespace ($namespace) {
-        $bird = new \Gajus\Paddy\Messenger();
+        $messenger = new \Gajus\Paddy\Messenger();
 
-        $bird->send('test', $namespace);
+        $this->assertFalse($messenger->has($namespace));
+
+        $messenger->send('test', $namespace);
 
         $messages = [];
         $messages[$namespace] = ['test'];
 
-        $this->assertSame($messages, $bird->getMessages());
+        $this->assertSame($messages, $messenger->getMessages());
+
+        $this->assertTrue($messenger->has($namespace));
+    }
+
+    /**
+     * @dataProvider sendMessageExplicitNamespaceProvider
+     */
+    public function testSendMessageExplicitNamespaceShorthand ($namespace) {
+        $messenger = new \Gajus\Paddy\Messenger();
+
+        $this->assertFalse($messenger->has($namespace));
+
+        $messenger->{$namespace}('test');
+
+        $messages = [];
+        $messages[$namespace] = ['test'];
+
+        $this->assertSame($messages, $messenger->getMessages());
+
+        $this->assertTrue($messenger->has($namespace));
     }
 
     public function sendMessageExplicitNamespaceProvider () {
@@ -85,9 +99,9 @@ class MessengerTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage Invalid message namespace.
      */
     public function testSendMessageUnexpectedNamespace () {
-        $bird = new \Gajus\Paddy\Messenger();
+        $messenger = new \Gajus\Paddy\Messenger();
 
-        $bird->send('test', 'foo');
+        $messenger->send('test', 'foo');
     }
 
     /**
@@ -95,29 +109,29 @@ class MessengerTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage Message is not a string.
      */
     public function testSendMessageNotString () {
-        $bird = new \Gajus\Paddy\Messenger();
+        $messenger = new \Gajus\Paddy\Messenger();
 
-        $bird->send(['test']);
+        $messenger->send(['test'], 'error');
     }
 
-    public function testSendMessageReturnBird () {
-        $bird = new \Gajus\Paddy\Messenger();
+    public function testSendMessageReturnItself () {
+        $messenger = new \Gajus\Paddy\Messenger();
 
-        $this->assertSame($bird, $bird->send('test'));
+        $this->assertSame($messenger, $messenger->send('test', 'error'));
     }
 
     public function testEmptyNest () {
-        $bird = new \Gajus\Paddy\Messenger();
+        $messenger = new \Gajus\Paddy\Messenger();
 
-        $this->assertSame('<ul class="paddy-messenger-nest no-messages"></ul>', $bird->getNest() );
+        $this->assertSame('<ul class="paddy-messenger-nest no-messages"></ul>', $messenger->getNest() );
     }
 
     public function testNest () {
-        $bird = new \Gajus\Paddy\Messenger();
+        $messenger = new \Gajus\Paddy\Messenger();
 
-        $bird->send('a');
-        $bird->send('b', 'success');
+        $messenger->send('a', 'error');
+        $messenger->send('b', 'success');
 
-        $this->assertSame('<ul class="paddy-messenger-nest with-messages"><li class="error">a</li><li class="success">b</li></ul>', $bird->getNest() );
+        $this->assertSame('<ul class="paddy-messenger-nest with-messages"><li class="error">a</li><li class="success">b</li></ul>', $messenger->getNest() );
     }
 }

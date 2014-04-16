@@ -76,7 +76,7 @@ class Messenger implements \Psr\Log\LoggerAwareInterface {
      * @param string $namespace Message namespace (success, error or notice).
      * @return $this
      */
-    public function send ($message) {
+    public function send ($message, $namespace) {
         $this->logger->debug('Sending message.', ['method' => __METHOD__, 'message' => $message, 'namespace' => $namespace]);
         
         if (!is_string($message)) {
@@ -120,7 +120,7 @@ class Messenger implements \Psr\Log\LoggerAwareInterface {
      * @return $this
      */
     public function notice ($message) {
-        return $this->notice($message, 'notice');
+        return $this->send($message, 'notice');
     }
 
     /**
