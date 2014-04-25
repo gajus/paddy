@@ -151,7 +151,7 @@ class Messenger implements \Psr\Log\LoggerAwareInterface {
         $messages_body = '';
 
         if ($messages) {
-            $container_name = 'paddy-messenger-nest with-messages';
+            $container_name = 'paddy-messenger with-messages';
 
             foreach ($messages as $namespace => $submessages) {
                 foreach ($submessages as $message) {
@@ -159,7 +159,7 @@ class Messenger implements \Psr\Log\LoggerAwareInterface {
                 }
             }
         } else {
-            $container_name = 'paddy-messenger-nest no-messages';
+            $container_name = 'paddy-messenger no-messages';
         }
 
         return '<ul class="' . $container_name . '">' . $messages_body . '</ul>';
