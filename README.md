@@ -125,14 +125,14 @@ Messages are carried across pages using `$_SESSION` variable. This requires that
 $messenger->error('foo');
 ```
 
-Requests that result in header-only response continue to persist message data:
+Response that has "location" header continue to persist message data:
 
 ```php
 // Page 2
 header('Location: Page 3');
 ```
 
-Messages are removed from session upon request resulting in ouput or without `Location:` header.
+Messages are discarded after the first page is displayed:
 
 ```php
 // Page 3

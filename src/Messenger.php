@@ -43,18 +43,27 @@ class Messenger implements \Psr\Log\LoggerAwareInterface {
         $method_name = __METHOD__;
 
         /**
-         * Messages are stored if there is no content displayed.
-         * Messages are discarded if there is content displayed.
+         * Messages are discarded when "location" header is not present.
          *
          * Do not use __destruct for this, because object can be destructed before the end of the script.
          * 
-         * @see http://stackoverflow.com/questions/21737903/how-to-get-content-length-at-the-end-of-request#21737991 Detect if body has been sent to the browser.
          * @codeCoverageIgnore
          */
         register_shutdown_function(function () use ($method_name) {
-            if (count(array_filter(ob_get_status(true), function ($status) { return $status['buffer_used']; } ))) {
+            
+            $location = false;
+
+            foreach (headers_list() as $header) {
+                if (mb_strpos(mb_strtolower($header), 'location:') === 0) {
+                    $location = true;
+
+                    break;
+                }
+            }
+
+            if (!$location) {
                 $this->logger->debug('Output buffer. Discarding messages.', ['method' => $method_name]);
-                
+            
                 $_SESSION['gajus']['paddy']['messenger'][$this->getNamespace()] = [];
             } else {
                 $this->logger->debug('No output buffer. Storring messages.', ['method' => $method_name]);
