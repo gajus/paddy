@@ -6,7 +6,7 @@ class MessengerTest extends PHPUnit_Framework_TestCase {
 
     /**
      * @expectedException Gajus\Paddy\Exception\LogicException
-     * @expectedExceptionMessage Session must be started before using Bird.
+     * @expectedExceptionMessage Session must be started before using Paddy.
      */
     public function testInitialiseWithoutSession () {
         session_destroy();
