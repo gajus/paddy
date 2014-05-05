@@ -29,7 +29,7 @@ class Messenger implements \Psr\Log\LoggerAwareInterface {
         $this->logger = new \Psr\Log\NullLogger;
 
         if (session_status() === PHP_SESSION_NONE) {
-            throw new Exception\LogicException('Session must be started before using Bird.');
+            throw new Exception\LogicException('Session must be started before using Paddy.');
         }
 
         if ($namespace === null) {
