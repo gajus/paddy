@@ -1,9 +1,8 @@
 # Paddy
 
-[![Build Status](https://travis-ci.org/gajus/paddy.png?branch=master)](https://travis-ci.org/gajus/paddy)
-[![Coverage Status](https://coveralls.io/repos/gajus/paddy/badge.png?branch=master)](https://coveralls.io/r/gajus/paddy?branch=master)
-[![Latest Stable Version](https://poser.pugx.org/gajus/paddy/version.png)](https://packagist.org/packages/gajus/paddy)
-[![License](https://poser.pugx.org/gajus/paddy/license.png)](https://packagist.org/packages/gajus/paddy)
+[![Build Status](https://img.shields.io/travis/gajus/paddy.svg?style=flat)](https://travis-ci.org/gajus/paddy)
+[![Coverage Status](https://img.shields.io/coveralls/jekyll/jekyll.svg?style=flat)](https://coveralls.io/r/gajus/paddy?branch=master)
+[![Latest Stable Version](https://img.shields.io/packagist/v/gajus/paddy.svg?style=flat)](https://packagist.org/packages/gajus/paddy)
 
 Messenger is used to carry (flash) messages between page requests using [session](http://www.php.net/manual/en/features.sessions.php).
 
