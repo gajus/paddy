@@ -1,6 +1,6 @@
 {
 	"name": "gajus/paddy",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "Session based (flash) messaging utility.",
 	"keywords": ["flash", "message"],
 	"homepage": "https://github.com/gajus/paddy",

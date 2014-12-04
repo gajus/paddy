@@ -40,19 +40,22 @@ class Messenger implements \Psr\Log\LoggerAwareInterface {
         $this->messages = isset($_SESSION['gajus']['paddy']['messenger'][$this->getNamespace()]) ? $_SESSION['gajus']['paddy']['messenger'][$this->getNamespace()] : [];
 
         // Otherwise PHP will pick up Gajus\Paddy\Messenger::Gajus\Paddy\{closure}.
-        $method_name = __METHOD__;
+        $method_name = __METHOD__;      
 
         /**
-         * Messages are stored if there is no content displayed.
+         * Messages are stored if there is no content displayed or if a Location header is present.
          * Messages are discarded if there is content displayed.
          *
          * Do not use __destruct for this, because object can be destructed before the end of the script.
          * 
-         * @see http://stackoverflow.com/questions/21737903/how-to-get-content-length-at-the-end-of-request#21737991 Detect if body has been sent to the browser.
          * @codeCoverageIgnore
          */
         register_shutdown_function(function () use ($method_name) {
-            if (count(array_filter(ob_get_status(true), function ($status) { return $status['buffer_used']; } ))) {
+            $location = count(array_filter(headers_list(), function ($data) {
+                return strpos(mb_strtolower($data), 'location:') === 0;
+            }));
+
+            if (headers_sent() && !$location) {
                 $this->logger->debug('Output buffer. Discarding messages.', ['method' => $method_name]);
                 
                 $_SESSION['gajus']['paddy']['messenger'][$this->getNamespace()] = [];
