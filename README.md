@@ -81,6 +81,38 @@ When there are no messages, `getMessageHolder` will produce:
 
 The empty tag is used for interoperability with the frontend script.
 
+Proposed stylesheet:
+
+```scss
+.paddy-messenger {
+    display: none;
+
+    li {
+        display: block; padding: 20px; color: #fff;
+
+        &.error {
+            background: #E74C3C;
+        }
+
+        &.notice {
+            background: #F1C40F;
+        }
+
+        &.important {
+            background: #3498DB;
+        }
+
+        &.success {
+            background: #27AE60;
+        }
+    }
+
+    &.with-messages {
+        display: block;
+    }
+}
+```
+
 ## Shorthand
 
 ```php
